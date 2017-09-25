@@ -9,7 +9,7 @@ import type { RawSiteMapData } from '../main';
 import xmlbuilder from 'xmlbuilder';
 
 export interface Formatter {
-	format(data: RawSiteMapData[]): string,
+	format(data: RawSiteMapData[]): string[],
 }
 
 export default class PlainFormatter implements Formatter {
@@ -22,16 +22,18 @@ export default class PlainFormatter implements Formatter {
 			}
 			return item;
 		});
-		return xmlbuilder
-			.create(
-				{
-					urlset: {
-						'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
-						url: data,
+		return [
+			xmlbuilder
+				.create(
+					{
+						urlset: {
+							'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+							url: data,
+						},
 					},
-				},
-				{ encoding: 'UTF-8' },
-			)
-			.end();
+					{ encoding: 'UTF-8' },
+				)
+				.end(),
+		];
 	}
 }

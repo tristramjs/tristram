@@ -17,8 +17,8 @@ describe('Formatting Module', () => {
 				changefreq: 'never',
 			},
 		]); //mising data
-		expect(xml).toBe(
+		expect(xml).toEqual([
 			`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>http://foo.bar</loc><lastmod>${date.toISOString()}</lastmod><priority>0.5</priority><changefreq>never</changefreq></url></urlset>`,
-		);
+		]);
 	});
 });
