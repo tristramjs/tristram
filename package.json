@@ -4,16 +4,14 @@
 	"description": "A pipeline for sitemap generation",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest"
+		"test": "jest",
+		"postinstall": "flow-typed install"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": [
-		"sitemap",
-		"seo"
-	],
+	"keywords": ["sitemap", "seo"],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -25,6 +23,7 @@
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.6.0",
 		"flow-bin": "^0.55.0",
+		"flow-typed": "^2.1.5",
 		"jest": "^21.1.0"
 	}
 }

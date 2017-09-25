@@ -6,9 +6,27 @@ import { PlainFormatter } from './formatting';
 type Props = {
 	fetchers: Fetcher<*, *>[],
 	formatter: Formatter,
+	options: Options,
 };
 
-export type RawSiteMapData = {};
+type Options = {
+	hostname: string,
+	cacheTime?: number,
+};
+
+export type RawSiteMapData = {
+	loc: string,
+	lastmod?: Date,
+	priority?: number,
+	changefreq?:
+		| 'always'
+		| 'hourly'
+		| 'daily'
+		| 'weekly'
+		| 'monthly'
+		| 'yearly'
+		| 'never',
+};
 
 export default class Main {
 	fetchers: Fetcher<*, *>[];
