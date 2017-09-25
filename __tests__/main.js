@@ -25,4 +25,14 @@ describe('Main module', () => {
 		const options = main.options;
 		expect(options).toBe(options);
 	});
+
+	it('should contain default options', () => {
+		expect(main.options.maxItemsPerSitemap).toBe(50000);
+	});
+
+	it('should overwrite default options', () => {
+		const options = { hostname: 'http://foo.bar', maxItemsPerSitemap: 20000 };
+		const main = new Main({ fetchers: [syncFetcher], formatter, options });
+		expect(main.options.maxItemsPerSitemap).toBe(20000);
+	});
 });

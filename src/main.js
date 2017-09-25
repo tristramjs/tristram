@@ -12,6 +12,7 @@ type Props = {
 export type Options = {
 	hostname: string,
 	cacheTime?: number,
+	maxItemsPerSitemap?: number,
 };
 
 export type RawSiteMapData = {
@@ -36,7 +37,7 @@ export default class Main {
 	constructor({ fetchers, formatter, options }: Props) {
 		this.fetchers = fetchers;
 		this.formatter = formatter;
-		this.options = options;
+		this.options = { maxItemsPerSitemap: 50000, ...options };
 	}
 
 	async run() {
