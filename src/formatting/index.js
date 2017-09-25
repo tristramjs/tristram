@@ -18,7 +18,7 @@ export default class PlainFormatter implements Formatter {
 	format(data: RawSiteMapData[]) {
 		data.map(item => {
 			if (item.lastmod) {
-				item.lastmod = item.lastmod.toDateString();
+				item.lastmod = item.lastmod.toISOString();
 			}
 			return item;
 		});
