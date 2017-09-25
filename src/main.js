@@ -17,7 +17,7 @@ export type Options = {
 
 export type RawSiteMapData = {
 	loc: string,
-	lastmod?: Date | string,
+	lastmod?: Date,
 	priority?: number,
 	changefreq?:
 		| 'always'
