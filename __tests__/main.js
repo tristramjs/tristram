@@ -2,21 +2,27 @@
 import Main from '../src/main';
 
 describe('Main module', () => {
-	it('should run without errors', async () => {
-		const syncFetcher = { getData: () => Promise.resolve({ loc: 'foooo' }) };
-		const formatter = {
-			format: data => `<urlset><loc>${data[0].loc}</loc></urlset>`,
-		};
-		const main = new Main({
-			fetchers: [syncFetcher],
-			formatter,
-			options: {
-				hostname: 'http://foo.bar',
-			},
-		});
+	const syncFetcher = { getData: () => Promise.resolve({ loc: 'foooo' }) };
+	const formatter = {
+		format: data => `<urlset><loc>${data[0].loc}</loc></urlset>`,
+	};
+	const options = {
+		hostname: 'http://foo.bar',
+	};
+	const main = new Main({
+		fetchers: [syncFetcher],
+		formatter,
+		options,
+	});
 
+	it('should run without errors', async () => {
 		const result = await main.run();
 
 		expect(result).toBe('<urlset><loc>foooo</loc></urlset>');
+	});
+
+	it('should contain options', () => {
+		const options = main.options;
+		expect(options).toBe(options);
 	});
 });

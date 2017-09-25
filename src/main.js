@@ -1,7 +1,7 @@
 /* @flow */
 import type { Fetcher } from './fetching';
 import type { Formatter } from './formatting';
-import { PlainFormatter } from './formatting';
+import PlainFormatter from './formatting';
 
 type Props = {
 	fetchers: Fetcher<*, *>[],
@@ -9,14 +9,14 @@ type Props = {
 	options: Options,
 };
 
-type Options = {
+export type Options = {
 	hostname: string,
 	cacheTime?: number,
 };
 
 export type RawSiteMapData = {
 	loc: string,
-	lastmod?: Date,
+	lastmod?: Date | string,
 	priority?: number,
 	changefreq?:
 		| 'always'
@@ -31,10 +31,12 @@ export type RawSiteMapData = {
 export default class Main {
 	fetchers: Fetcher<*, *>[];
 	formatter: Formatter;
+	options: Options;
 
-	constructor({ fetchers, formatter }: Props) {
+	constructor({ fetchers, formatter, options }: Props) {
 		this.fetchers = fetchers;
 		this.formatter = formatter;
+		this.options = options;
 	}
 
 	async run() {

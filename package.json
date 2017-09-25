@@ -11,7 +11,10 @@
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": ["sitemap", "seo"],
+	"keywords": [
+		"sitemap",
+		"seo"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -25,5 +28,8 @@
 		"flow-bin": "^0.55.0",
 		"flow-typed": "^2.1.5",
 		"jest": "^21.1.0"
+	},
+	"dependencies": {
+		"xmlbuilder": "^9.0.4"
 	}
 }
