@@ -1,0 +1,10 @@
+{
+	"passPerPreset": true,
+	"presets": ["es2017"],
+	"plugins": [
+		"transform-runtime",
+		"transform-flow-strip-types",
+		"transform-object-rest-spread",
+		"transform-async-to-generator"
+	]
+}
