@@ -5,19 +5,31 @@
 //
 // class NewsSiteMapFormatter extends VanillaFormatter {}
 
-import type { RawSiteMapData } from '../main';
+import type { RawSiteMapData, Options } from '../main';
 import { siteMapDataMapper, createSitemap } from './helper';
+import type { MappedSiteMapData } from './helper';
 import xmlbuilder from 'xmlbuilder';
 
-export interface Formatter {
+export interface Formatter<Options> {
 	format(data: RawSiteMapData[]): string[],
 }
 
-export default class PlainFormatter implements Formatter {
-	constructor() {}
+type Props = {
+	options: Options,
+};
 
-	format(data: RawSiteMapData[]) {
-		data.map(item => siteMapDataMapper(item));
+export default class PlainFormatter implements Formatter<Options> {
+	options: Options;
+
+	constructor({ options }: Props) {
+		this.options = options;
+	}
+
+	format(data: RawSiteMapData[]): string[] {
+		// $FlowFixMe
+		data = data.map(item => siteMapDataMapper(item));
+
+		// $FlowFixMe
 		return [createSitemap(data)];
 	}
 }

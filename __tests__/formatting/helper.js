@@ -1,5 +1,9 @@
 /* @flow */
-import { siteMapDataMapper, createSitemap } from '../../src/formatting/helper';
+import {
+	siteMapDataMapper,
+	createSitemap,
+	createIndexSitemap,
+} from '../../src/formatting/helper';
 
 describe('Helper Formatting Module', () => {
 	const date = new Date();
@@ -18,8 +22,14 @@ describe('Helper Formatting Module', () => {
 				changefreq: 'never',
 			},
 		]); //mising data
-		expect(xml).toEqual(
+		expect(xml).toBe(
 			`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>http://foo.bar</loc><lastmod>${date.toISOString()}</lastmod><priority>0.5</priority><changefreq>never</changefreq></url></urlset>`,
+		);
+	});
+	test('createIndexSitemap', () => {
+		const xml = createIndexSitemap(1, 'foo.bar');
+		expect(xml).toEqual(
+			'<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://foo.bar/sitemaps/1.xml</loc></sitemap></sitemapindex>',
 		);
 	});
 });

@@ -5,14 +5,21 @@ import PlainFormatter from './formatting';
 
 type Props = {
 	fetchers: Fetcher<*, *>[],
-	formatter: Formatter,
+	formatter: Formatter<Options>,
 	options: Options,
 };
 
 export type Options = {
 	hostname: string,
+	path?: string,
 	cacheTime?: number,
 	maxItemsPerSitemap?: number,
+};
+
+type OptionsWithDefaults = {
+	hostname: string,
+	cacheTime?: number,
+	maxItemsPerSitemap: number,
 };
 
 export type RawSiteMapData = {
@@ -31,18 +38,23 @@ export type RawSiteMapData = {
 
 export default class Main {
 	fetchers: Fetcher<*, *>[];
-	formatter: Formatter;
+	formatter: Formatter<Options>;
 	options: Options;
 
 	constructor({ fetchers, formatter, options }: Props) {
 		this.fetchers = fetchers;
 		this.formatter = formatter;
-		this.options = { maxItemsPerSitemap: 50000, ...options };
+		this.options = ({
+			maxItemsPerSitemap: (50000: number),
+			...options,
+			// $FlowFixMe
+		}: OptionsWithDefaults);
 	}
 
 	async run() {
 		const data = await Promise.all(this.fetchers.map(f => f.getData()));
 
+		// $FlowFixMe
 		return this.formatter.format(data);
 	}
 }

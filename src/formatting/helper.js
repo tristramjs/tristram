@@ -32,12 +32,33 @@ export function createSitemap(data: MappedSiteMapData[]): string {
 		.end();
 }
 
+export function createIndexSitemap(
+	numberSitemaps: number,
+	hostname: string,
+): string {
+	const indexItems = [];
+	for (let i = numberSitemaps; i > 0; i--) {
+		const sitemap = {
+			loc: `https://${hostname}/sitemaps/${i}.xml`, //missing path!!!
+		};
+		indexItems.push(sitemap);
+	}
+	const xmlObj = {
+		sitemapindex: {
+			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			sitemap: indexItems,
+		},
+	};
+	return xmlbuilder.create(xmlObj, { encoding: 'UTF-8' }).end();
+}
+
 //rename this!
 export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
-	if (item.lastmod) {
-		item.lastmod = item.lastmod.toISOString();
-	}
-	//more changes(renamings) to RawSiteMapData here
+	const updated = { ...item };
 
-	return item;
+	if (item.lastmod) {
+		updated.lastmod = item.lastmod.toISOString();
+	}
+	// $FlowFixMe
+	return updated;
 }

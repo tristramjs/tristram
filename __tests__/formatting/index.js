@@ -2,7 +2,11 @@
 import PlainFormatter from '../../src/formatting/index';
 
 describe('Formatting Module', () => {
-	const formatter = new PlainFormatter();
+	const options = {
+		hostname: 'foo.bar',
+		maxItemsPerSitemap: 50000,
+	};
+	const formatter = new PlainFormatter({ options });
 	const date = new Date();
 	it('should initalize', () => {
 		expect(formatter).toBeInstanceOf(PlainFormatter);
