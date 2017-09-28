@@ -19,37 +19,38 @@ export type MappedSiteMapData = {
 };
 
 export function createSitemap(data: MappedSiteMapData[]): string {
-	return xmlbuilder
-		.create(
-			{
-				urlset: {
-					'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
-					url: data,
-				},
-			},
-			{ encoding: 'UTF-8' },
-		)
-		.end();
+	const xmlObj = {
+		urlset: {
+			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			url: data,
+		},
+	};
+	const xml = createXML(xmlObj);
+	return xml;
 }
 
 export function createIndexSitemap(
 	numberSitemaps: number,
 	hostname: string,
+	path: string,
 ): string {
 	const indexItems = [];
 	for (let i = numberSitemaps; i > 0; i--) {
 		const sitemap = {
-			loc: `https://${hostname}/sitemaps/${i}.xml`, //missing path!!!
+			loc: `https://${hostname}/${path}/sitemap-${i}.xml`,
 		};
 		indexItems.push(sitemap);
 	}
+
 	const xmlObj = {
 		sitemapindex: {
 			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
 			sitemap: indexItems,
 		},
 	};
-	return xmlbuilder.create(xmlObj, { encoding: 'UTF-8' }).end();
+
+	const xml = createXML(xmlObj);
+	return xml;
 }
 
 //rename this!
@@ -61,4 +62,8 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	}
 	// $FlowFixMe
 	return updated;
+}
+
+function createXML(objToXml: Object): string {
+	return xmlbuilder.create(objToXml, { encoding: 'UTF-8' }).end();
 }

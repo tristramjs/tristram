@@ -27,9 +27,9 @@ describe('Helper Formatting Module', () => {
 		);
 	});
 	test('createIndexSitemap', () => {
-		const xml = createIndexSitemap(1, 'foo.bar');
+		const xml = createIndexSitemap(1, 'foo.bar', 'sitemaps');
 		expect(xml).toEqual(
-			'<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://foo.bar/sitemaps/1.xml</loc></sitemap></sitemapindex>',
+			'<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://foo.bar/sitemaps/sitemap-1.xml</loc></sitemap></sitemapindex>',
 		);
 	});
 });

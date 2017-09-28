@@ -16,10 +16,11 @@ export type Options = {
 	maxItemsPerSitemap?: number,
 };
 
-type OptionsWithDefaults = {
+export type OptionsWithDefaults = {
 	hostname: string,
 	cacheTime?: number,
 	maxItemsPerSitemap: number,
+	path: string,
 };
 
 export type RawSiteMapData = {
@@ -46,6 +47,7 @@ export default class Main {
 		this.formatter = formatter;
 		this.options = ({
 			maxItemsPerSitemap: (50000: number),
+			path: 'sitemaps',
 			...options,
 			// $FlowFixMe
 		}: OptionsWithDefaults);
