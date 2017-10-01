@@ -16,6 +16,13 @@ export type MappedSiteMapData = {
 		| 'monthly'
 		| 'yearly'
 		| 'never',
+	'image:image'?: {
+		'image:loc': string,
+		'image:caption'?: string,
+		'image:geo_location'?: string,
+		'image:title'?: string,
+		'image:license'?: string,
+	}[],
 };
 
 export function createSitemap(data: MappedSiteMapData[]): string {
@@ -60,10 +67,32 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	if (item.lastmod) {
 		updated.lastmod = item.lastmod.toISOString();
 	}
+	if (item.image) {
+		if (Array.isArray(item.image)) {
+			updated['image:image'] = item.image.map(obj =>
+				prefixKeysInObject(obj, 'image'),
+			);
+			delete updated.image;
+		}
+		if (typeof item.image === 'object' && !Array.isArray(item.image)) {
+			updated['image:image'] = prefixKeysInObject(item.image, 'image');
+			delete updated.image;
+		}
+	}
 	// $FlowFixMe
 	return updated;
 }
 
 function createXML(objToXml: Object): string {
 	return xmlbuilder.create(objToXml, { encoding: 'UTF-8' }).end();
+}
+
+function prefixKeysInObject(obj: Object, prefix: string): Object {
+	obj = Object.assign(
+		// $FlowFixMe
+		...Object.keys(obj).map(key => ({
+			[`${prefix}:${key.toString()}`]: obj[key],
+		})),
+	);
+	return obj;
 }

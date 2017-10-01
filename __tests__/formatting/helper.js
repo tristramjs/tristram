@@ -9,8 +9,13 @@ describe('Helper Formatting Module', () => {
 	const date = new Date();
 	test('siteMapDataMapper', () => {
 		const loc = 'http://foo.bar';
-		const data = { loc, lastmod: date };
-		const expectedOutput = { loc, lastmod: date.toISOString() };
+		const image = [{ loc }, { loc }];
+		const data = { loc, image, lastmod: date };
+		const expectedOutput = {
+			loc,
+			lastmod: date.toISOString(),
+			'image:image': [{ 'image:loc': loc }, { 'image:loc': loc }],
+		};
 		expect(siteMapDataMapper(data)).toEqual(expectedOutput);
 	});
 	test('createSitemap', () => {

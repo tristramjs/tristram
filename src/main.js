@@ -23,6 +23,14 @@ export type OptionsWithDefaults = {
 	path: string,
 };
 
+export type imageData = {
+	loc: string,
+	caption?: string,
+	geo_location?: string,
+	title?: string,
+	license?: string,
+};
+
 export type RawSiteMapData = {
 	loc: string,
 	lastmod?: Date,
@@ -35,6 +43,7 @@ export type RawSiteMapData = {
 		| 'monthly'
 		| 'yearly'
 		| 'never',
+	image?: imageData[],
 };
 
 export default class Main {
