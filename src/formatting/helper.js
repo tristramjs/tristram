@@ -23,9 +23,31 @@ export type MappedSiteMapData = {
 		'image:title'?: string,
 		'image:license'?: string,
 	}[],
+	'video:video'?: {
+		'video:thumbnail_loc': string,
+		'video:title': string,
+		'video:description': string,
+		'video:content_loc'?: string,
+		'video:player_loc'?: string,
+		'video:duration'?: string,
+		'video:expiration_date'?: string,
+		'video:rating'?: number,
+		'video:view_count'?: number,
+		'video:publication_date'?: string,
+		'video:family_friendly'?: string,
+		'video:category'?: string,
+		'video:restriction'?: string, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
+		'video:gallery_loc'?: string,
+		'video:price'?: string,
+		'video:requieres_subscription'?: string,
+		'video:uploader'?: string,
+		'video:platform'?: string,
+		'video:live'?: string,
+	}[],
 };
 
 export function createSitemap(data: MappedSiteMapData[]): string {
+	// add xmlns for video and image!!
 	const xmlObj = {
 		urlset: {
 			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
@@ -79,6 +101,77 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 			delete updated.image;
 		}
 	}
+	if (item.video) {
+		if (Array.isArray(item.video)) {
+			// fix all datatypes
+			item.video.map(obj => {
+				if (obj.expiration_date) {
+					// $FlowFixMe
+					obj.expiration_date = obj.expiration_date.toISOString();
+				}
+				if (obj.publication_date) {
+					// $FlowFixMe
+					obj.publication_date = obj.publication_date.toISOString();
+				}
+				if (obj.family_friendly !== null || obj.family_friendly !== undefined) {
+					// $FlowFixMe
+					obj.family_friendly = boolToText(obj.family_friendly);
+				}
+				if (
+					obj.requieres_subscription !== null ||
+					obj.requieres_subscription !== undefined
+				) {
+					// $FlowFixMe
+					obj.requieres_subscription = boolToText(obj.requieres_subscription);
+				}
+				if (obj.live !== null || obj.live !== undefined) {
+					// $FlowFixMe
+					obj.live = boolToText(obj.live);
+				}
+				return obj;
+			});
+			// prefix keys
+			// $FlowFixMe
+			updated['video:video'] = item.video.map(obj =>
+				prefixKeysInObject(obj, 'video'),
+			);
+			delete updated.video;
+		}
+		if (typeof item.video === 'object' && !Array.isArray(item.video)) {
+			// fix all datatypes
+			if (item.video.expiration_date) {
+				// $FlowFixMe
+				item.video.expiration_date = item.video.expiration_date.toISOString();
+			}
+			if (item.video.publication_date) {
+				// $FlowFixMe
+				item.video.publication_date = item.video.publication_date.toISOString();
+			}
+			if (
+				item.video.family_friendly !== null ||
+				item.video.family_friendly !== undefined
+			) {
+				// $FlowFixMe
+				item.video.family_friendly = boolToText(item.video.family_friendly);
+			}
+			if (
+				item.video.requieres_subscription !== null ||
+				item.video.requieres_subscription !== undefined
+			) {
+				// $FlowFixMe
+				item.video.requieres_subscription = boolToText(
+					item.video.requieres_subscription,
+				);
+			}
+			if (item.video.live !== null || item.video.live !== undefined) {
+				// $FlowFixMe
+				item.video.live = boolToText(item.video.live);
+			}
+			//prefix keys
+			updated['video:video'] = prefixKeysInObject(item.video, 'video');
+			delete updated.video;
+		}
+	}
 	// $FlowFixMe
 	return updated;
 }
@@ -95,4 +188,11 @@ function prefixKeysInObject(obj: Object, prefix: string): Object {
 		})),
 	);
 	return obj;
+}
+
+function boolToText(bool: boolean): string {
+	if (bool) {
+		return 'yes';
+	}
+	return 'no';
 }

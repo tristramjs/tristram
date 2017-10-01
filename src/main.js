@@ -31,6 +31,28 @@ export type imageData = {
 	license?: string,
 };
 
+export type videoData = {
+	thumbnail_loc: string,
+	title: string,
+	description: string,
+	content_loc?: string,
+	player_loc?: string,
+	duration?: string,
+	expiration_date?: Date,
+	rating?: number,
+	view_count?: number,
+	publication_date?: Date,
+	family_friendly?: boolean,
+	category?: string,
+	restriction?: string, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
+	gallery_loc?: string,
+	price?: string,
+	requieres_subscription?: boolean,
+	uploader?: string,
+	platform?: string,
+	live?: boolean,
+};
+
 export type RawSiteMapData = {
 	loc: string,
 	lastmod?: Date,
@@ -44,6 +66,7 @@ export type RawSiteMapData = {
 		| 'yearly'
 		| 'never',
 	image?: imageData[],
+	video?: videoData[],
 };
 
 export default class Main {

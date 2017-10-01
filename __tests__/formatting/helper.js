@@ -10,11 +10,35 @@ describe('Helper Formatting Module', () => {
 	test('siteMapDataMapper', () => {
 		const loc = 'http://foo.bar';
 		const image = [{ loc }, { loc }];
-		const data = { loc, image, lastmod: date };
+		const video = [
+			{
+				thumbnail_loc: loc,
+				title: 'title',
+				description: 'description',
+				expiration_date: date,
+				publication_date: date,
+				family_friendly: true,
+				requieres_subscription: false,
+				live: false,
+			},
+		];
+		const data = { loc, image, video, lastmod: date };
 		const expectedOutput = {
 			loc,
 			lastmod: date.toISOString(),
 			'image:image': [{ 'image:loc': loc }, { 'image:loc': loc }],
+			'video:video': [
+				{
+					'video:thumbnail_loc': loc,
+					'video:title': 'title',
+					'video:description': 'description',
+					'video:expiration_date': date.toISOString(),
+					'video:publication_date': date.toISOString(),
+					'video:family_friendly': 'yes',
+					'video:requieres_subscription': 'no',
+					'video:live': 'no',
+				},
+			],
 		};
 		expect(siteMapDataMapper(data)).toEqual(expectedOutput);
 	});
