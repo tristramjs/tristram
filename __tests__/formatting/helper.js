@@ -18,7 +18,7 @@ describe('Helper Formatting Module', () => {
 				expiration_date: date,
 				publication_date: date,
 				family_friendly: true,
-				requieres_subscription: false,
+				requires_subscription: false,
 				live: false,
 			},
 		];
@@ -35,7 +35,7 @@ describe('Helper Formatting Module', () => {
 					'video:expiration_date': date.toISOString(),
 					'video:publication_date': date.toISOString(),
 					'video:family_friendly': 'yes',
-					'video:requieres_subscription': 'no',
+					'video:requires_subscription': 'no',
 					'video:live': 'no',
 				},
 			],

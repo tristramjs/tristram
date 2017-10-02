@@ -39,7 +39,7 @@ export type MappedSiteMapData = {
 		'video:restriction'?: string, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
 		'video:gallery_loc'?: string,
 		'video:price'?: string,
-		'video:requieres_subscription'?: string,
+		'video:requires_subscription'?: string,
 		'video:uploader'?: string,
 		'video:platform'?: string,
 		'video:live'?: string,
@@ -119,11 +119,11 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 					obj.family_friendly = boolToText(obj.family_friendly);
 				}
 				if (
-					obj.requieres_subscription !== null ||
-					obj.requieres_subscription !== undefined
+					obj.requires_subscription !== null ||
+					obj.requires_subscription !== undefined
 				) {
 					// $FlowFixMe
-					obj.requieres_subscription = boolToText(obj.requieres_subscription);
+					obj.requires_subscription = boolToText(obj.requires_subscription);
 				}
 				if (obj.live !== null || obj.live !== undefined) {
 					// $FlowFixMe
@@ -156,12 +156,12 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 				item.video.family_friendly = boolToText(item.video.family_friendly);
 			}
 			if (
-				item.video.requieres_subscription !== null ||
-				item.video.requieres_subscription !== undefined
+				item.video.requires_subscription !== null ||
+				item.video.requires_subscription !== undefined
 			) {
 				// $FlowFixMe
-				item.video.requieres_subscription = boolToText(
-					item.video.requieres_subscription,
+				item.video.requires_subscription = boolToText(
+					item.video.requires_subscription,
 				);
 			}
 			if (item.video.live !== null || item.video.live !== undefined) {

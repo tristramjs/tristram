@@ -47,7 +47,7 @@ export type videoData = {
 	restriction?: string, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
 	gallery_loc?: string,
 	price?: string,
-	requieres_subscription?: boolean,
+	requires_subscription?: boolean,
 	uploader?: string,
 	platform?: string,
 	live?: boolean,
