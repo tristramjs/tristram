@@ -47,10 +47,11 @@ export type MappedSiteMapData = {
 };
 
 export function createSitemap(data: MappedSiteMapData[]): string {
-	// add xmlns for video and image!!
 	const xmlObj = {
 		urlset: {
 			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			'@xmlns:image': 'http://www.google.com/schemas/sitemap-image/1.1',
+			'@xmlns:video': 'http://www.google.com/schemas/sitemap-video/1.1',
 			url: data,
 		},
 	};
