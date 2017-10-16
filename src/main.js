@@ -4,7 +4,7 @@ import type { Formatter } from './formatting';
 import PlainFormatter from './formatting';
 
 type Props = {
-	fetchers: Fetcher<*, *>[],
+	fetchers: Fetcher[],
 	formatter: Formatter<Options>,
 	options: Options,
 };
@@ -57,20 +57,13 @@ export type RawSiteMapData = {
 	loc: string,
 	lastmod?: Date,
 	priority?: number,
-	changefreq?:
-		| 'always'
-		| 'hourly'
-		| 'daily'
-		| 'weekly'
-		| 'monthly'
-		| 'yearly'
-		| 'never',
+	changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never',
 	image?: imageData[],
 	video?: videoData[],
 };
 
 export default class Main {
-	fetchers: Fetcher<*, *>[];
+	fetchers: Fetcher[];
 	formatter: Formatter<Options>;
 	options: Options;
 

@@ -22,14 +22,18 @@
 	},
 	"homepage": "https://github.com/sambou/tristram#readme",
 	"devDependencies": {
+		"babel-plugin-transform-class-properties": "^6.24.1",
 		"babel-plugin-transform-flow-strip-types": "^6.22.0",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.6.0",
-		"flow-bin": "^0.55.0",
+		"flow-bin": "^0.56.0",
 		"flow-typed": "^2.1.5",
-		"jest": "^21.1.0"
+		"jest": "^21.1.0",
+		"jest-cli": "^21.2.1"
 	},
 	"dependencies": {
+		"@sep/eslint-config-sep": "^1.0.20",
+		"node-fetch": "^1.7.3",
 		"xmlbuilder": "^9.0.4"
 	}
 }
