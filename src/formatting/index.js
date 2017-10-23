@@ -1,8 +1,9 @@
 /* @flow */
 
 // TODO:
-// - video sitemap isn't fully functional. Missing elements: category, restriction, gallery_loc, price,
-// uploader and platform. All have custom attributes, which aren't implemented yet
+// - video sitemap isn't fully functional. Missing elements: tags (test if works in snapshots!),
+//restriction (add to snapshot test), gallery_loc(snapshot), price(snapshot),
+// uploader(snapshot) and platform(snapshot), player_loc. All have custom attributes, which aren't implemented yet
 // - formatter only has one property. Should we add some functionality from helper.js as formatter properties?
 // - build an integrated pipeline with express
 // - fix flow....

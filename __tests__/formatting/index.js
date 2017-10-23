@@ -37,7 +37,7 @@ describe('Formatting Module', () => {
 		expect(xml).toMatchSnapshot();
 	});
 
-	it('sould format correctly with video data added', () => {
+	it('should format correctly with video data added', () => {
 		const xml = formatter.format([
 			{
 				loc: 'http://www.example.com/videos/some_video_landing_page.html',
@@ -47,15 +47,21 @@ describe('Formatting Module', () => {
 						title: 'Grilling steaks for summer',
 						description: 'Alkis shows you how to get perfectly done steaks every time',
 						content_loc: 'http://www.example.com/video123.mp4',
-						player_loc: 'http://www.example.com/videoplayer.mp4?video=123',
+						player_loc: { loc: 'http://www.example.com/videoplayer.mp4?video=123' },
 						duration: '600',
 						expiration_date: new Date('2009-11-05T19:20:30+08:00'),
 						rating: 4.2,
 						view_count: 12345,
 						publication_date: new Date('2007-11-05T19:20:30+08:00'),
 						family_friendly: true,
+						tag: [ 'This', 'is', 'a', 'tag' ],
+						restriction: { relationship: 'deny', countrys: [ 'GB', 'US' ] },
+						gallery_loc: { url: 'http://bpaul.us' },
+						price: [ { amount: 1, currency: 'EUR' }, { amount: 2, currency: 'USD' } ],
+						uploader: { name: 'Mr Mister' },
 						requires_subscription: true,
 						live: false,
+						platform: { countrys: [ 'tv' ], relationship: 'deny' },
 					},
 				],
 			},

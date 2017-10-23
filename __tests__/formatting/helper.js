@@ -24,6 +24,28 @@ describe('Helper Formatting Module', () => {
 				family_friendly: true,
 				requires_subscription: false,
 				live: false,
+				restriction: {
+					relationship: 'allow',
+					countrys: [ 'IE', 'GB' ],
+				},
+				gallery_loc: {
+					title: 'test',
+					url: 'http://foo.bar',
+				},
+				price: [
+					{
+						amount: 1.99,
+						currency: 'EUR',
+						type: 'rent',
+						resolution: 'HD',
+					},
+				],
+				uploader: { name: 'Bernd', info: 'http://bpaul.us' },
+				platform: {
+					relationship: 'allow',
+					countrys: [ 'web', 'tv' ],
+				},
+				player_loc: { loc: 'http://foo.bar', autoplay: 'autoplay=1' },
 			},
 		];
 		const data = { loc, image, video, lastmod: date };
@@ -41,6 +63,12 @@ describe('Helper Formatting Module', () => {
 					'video:family_friendly': 'yes',
 					'video:requires_subscription': 'no',
 					'video:live': 'no',
+					'video:restriction': { '@relationship': 'allow', '#text': 'IE GB' },
+					'video:gallery_loc': { '@title': 'test', '#text': 'http://foo.bar' },
+					'video:price': [ { '#text': 1.99, '@currency': 'EUR', '@type': 'rent', '@resolution': 'HD' } ],
+					'video:uploader': { '#text': 'Bernd', '@info': 'http://bpaul.us' },
+					'video:platform': { '@relationship': 'allow', '#text': 'web tv' },
+					'video:player_loc': { '#text': 'http://foo.bar', '@autoplay': 'autoplay=1' },
 				},
 			],
 		};

@@ -36,20 +36,27 @@ export type videoData = {
 	title: string,
 	description: string,
 	content_loc?: string,
-	player_loc?: string,
+	player_loc?: { loc: string, autoplay?: string },
 	duration?: string,
 	expiration_date?: Date,
 	rating?: number,
 	view_count?: number,
 	publication_date?: Date,
 	family_friendly?: boolean,
+	tag?: string[],
 	category?: string,
-	restriction?: string, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
-	gallery_loc?: string,
-	price?: string,
+	restriction?: {
+		relationship: 'allow' | 'deny',
+		countrys: string[],
+	}, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
+	gallery_loc?: {
+		url: string,
+		title?: string,
+	},
+	price?: { amount: number, currency: string, type?: 'rent' | 'own', resolution?: 'HD' | 'SD' }[],
 	requires_subscription?: boolean,
-	uploader?: string,
-	platform?: string,
+	uploader?: { name: string, info?: string },
+	platform?: { countrys: string[], relationship: 'allow' | 'deny' },
 	live?: boolean,
 };
 

@@ -21,20 +21,21 @@ export type MappedSiteMapData = {
 		'video:title': string,
 		'video:description': string,
 		'video:content_loc'?: string,
-		'video:player_loc'?: string,
+		'video:player_loc'?: { '#text': string, '@autoplay'?: string },
 		'video:duration'?: string,
 		'video:expiration_date'?: string,
 		'video:rating'?: number,
 		'video:view_count'?: number,
 		'video:publication_date'?: string,
 		'video:family_friendly'?: string,
+		'video:tag'?: string[],
 		'video:category'?: string,
-		'video:restriction'?: string, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
-		'video:gallery_loc'?: string,
-		'video:price'?: string,
+		'video:restriction'?: { '@relationship': 'allow' | 'deny', '#text': string }, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
+		'video:gallery_loc'?: { '@title'?: string, '#text': string },
+		'video:price'?: { '#text': number, '@currency': string, '@type'?: 'rent' | 'own', '@resolution'?: 'HD' | 'SD' }[],
 		'video:requires_subscription'?: string,
-		'video:uploader'?: string,
-		'video:platform'?: string,
+		'video:uploader'?: { '#text': string, '@info'?: string },
+		'video:platform'?: { '@relationship': 'allow' | 'deny', '#text': string },
 		'video:live'?: string,
 	}[],
 };
@@ -139,6 +140,54 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 					// $FlowFixMe
 					obj.live = boolToText(obj.live);
 				}
+				if (obj.restriction) {
+					obj.restriction = {
+						'@relationship': obj.restriction.relationship,
+						'#text': obj.restriction.countrys.join(' '),
+					};
+				}
+				if (obj.gallery_loc) {
+					if (obj.gallery_loc.title) {
+						obj.gallery_loc = {
+							'@title': obj.gallery_loc.title,
+							'#text': obj.gallery_loc.url,
+						};
+					} else {
+						obj.gallery_loc = { '#text': obj.gallery_loc.url };
+					}
+				}
+				if (obj.price) {
+					obj.price = obj.price.map(item => {
+						let rvalue = { '#text': item.amount, '@currency': item.currency };
+						if (item.type) {
+							rvalue['@type'] = item.type;
+						}
+						if (item.resolution) {
+							rvalue['@resolution'] = item.resolution;
+						}
+						return rvalue;
+					});
+				}
+				if (obj.uploader) {
+					if (obj.uploader.info) {
+						obj.uploader = { '#text': obj.uploader.name, '@info': obj.uploader.info };
+					} else {
+						obj.uploader = { '#text': obj.uploader.name };
+					}
+				}
+				if (obj.platform) {
+					obj.platform = {
+						'@relationship': obj.platform.relationship,
+						'#text': obj.platform.countrys.join(' '),
+					};
+				}
+				if (obj.player_loc) {
+					if (obj.player_loc.autoplay) {
+						obj.player_loc = { '#text': obj.player_loc.loc, '@autoplay': obj.player_loc.autoplay };
+					} else {
+						obj.player_loc = { '#text': obj.player_loc.loc };
+					}
+				}
 				return obj;
 			});
 			// prefix keys
@@ -167,6 +216,54 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 			if (item.video.live !== null || item.video.live !== undefined) {
 				// $FlowFixMe
 				item.video.live = boolToText(item.video.live);
+			}
+			if (item.video.restriction) {
+				item.video.restriction = {
+					'@relationship': item.video.restriction.relationship,
+					'#text': item.video.restriction.countrys.join(' '),
+				};
+			}
+			if (item.video.gallery_loc) {
+				if (item.video.gallery_loc.title) {
+					item.video.gallery_loc = {
+						'@title': item.video.gallery_loc.title,
+						'#text': item.video.gallery_loc.url,
+					};
+				} else {
+					item.video.gallery_loc = { '#text': item.video.gallery_loc.url };
+				}
+			}
+			if (item.video.price) {
+				item.video.price = item.video.price.map(item => {
+					let rvalue = { '#text': item.amount, '@currency': item.currency };
+					if (item.type) {
+						rvalue['@type'] = item.type;
+					}
+					if (item.resolution) {
+						rvalue['@resolution'] = item.resolution;
+					}
+					return rvalue;
+				});
+			}
+			if (item.video.uploader) {
+				if (item.video.uploader.info) {
+					item.video.uploader = { '#text': item.video.uploader.name, '@info': item.video.uploader.info };
+				} else {
+					item.video.uploader = { '#text': item.video.uploader.name };
+				}
+			}
+			if (item.video.platform) {
+				item.video.platform = {
+					'@relationship': item.video.platform.relationship,
+					'#text': item.video.platform.countrys.join(' '),
+				};
+			}
+			if (item.video.player_loc) {
+				if (item.video.player_loc.autoplay) {
+					item.video.player_loc = { '#text': item.video.player_loc.loc, '@autoplay': item.video.player_loc.autoplay };
+				} else {
+					item.video.player_loc = { '#text': item.video.player_loc.loc };
+				}
 			}
 			//prefix keys
 			updated['video:video'] = prefixKeysInObject(item.video, 'video');
