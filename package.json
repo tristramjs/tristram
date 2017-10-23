@@ -5,16 +5,14 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
+		"test-update": "jest -u",
 		"postinstall": "flow-typed install"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": [
-		"sitemap",
-		"seo"
-	],
+	"keywords": ["sitemap", "seo"],
 	"author": "",
 	"license": "MIT",
 	"bugs": {

@@ -62,6 +62,23 @@ export type RawSiteMapData = {
 	video?: videoData[],
 };
 
+type newsGenres = 'Blog' | 'OpEd' | 'Opinion' | 'PressRelease' | 'Satire' | 'UserGenerated';
+
+export type RawNewsSiteMapData = {
+	loc: string,
+	news: {
+		publication: {
+			name: string,
+			language: string,
+		},
+		genres?: newsGenres | newsGenres[],
+		publication_date: Date,
+		title: string,
+		keywords?: string | string[],
+		stock_tickers?: string | string[],
+	},
+};
+
 export default class Main {
 	fetchers: Fetcher[];
 	formatter: Formatter<Options>;

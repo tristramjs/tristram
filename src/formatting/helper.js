@@ -2,20 +2,13 @@
 
 import xmlbuilder from 'xmlbuilder';
 
-import type { RawSiteMapData } from '../main';
+import type { RawSiteMapData, RawNewsSiteMapData } from '../main';
 
 export type MappedSiteMapData = {
 	loc: string,
 	lastmod?: string,
 	priority?: number,
-	changefreq?:
-		| 'always'
-		| 'hourly'
-		| 'daily'
-		| 'weekly'
-		| 'monthly'
-		| 'yearly'
-		| 'never',
+	changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never',
 	'image:image'?: {
 		'image:loc': string,
 		'image:caption'?: string,
@@ -46,6 +39,21 @@ export type MappedSiteMapData = {
 	}[],
 };
 
+export type MappedNewsSiteMapData = {
+	loc: string,
+	'news:news': {
+		'news:publication': {
+			'news:name': string,
+			'news:language': string,
+		},
+		'news:genres'?: string | string[],
+		'news:publication_date': string,
+		'news:title': string,
+		'news:keywords'?: string | string[],
+		'news:stock_tickers'?: string | string[],
+	},
+};
+
 export function createSitemap(data: MappedSiteMapData[]): string {
 	const xmlObj = {
 		urlset: {
@@ -59,11 +67,19 @@ export function createSitemap(data: MappedSiteMapData[]): string {
 	return xml;
 }
 
-export function createIndexSitemap(
-	numberSitemaps: number,
-	hostname: string,
-	path: string,
-): string {
+export function createNewsSitemap(data: MappedNewsSiteMapData[]): string {
+	const xmlObj = {
+		urlset: {
+			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
+			'@xmlns:news': 'http://www.google.com/schemas/sitemap-news/0.9',
+			url: data,
+		},
+	};
+	const xml = createXML(xmlObj);
+	return xml;
+}
+
+export function createIndexSitemap(numberSitemaps: number, hostname: string, path: string): string {
 	const indexItems = [];
 	for (let i = numberSitemaps; i > 0; i--) {
 		const sitemap = {
@@ -83,7 +99,6 @@ export function createIndexSitemap(
 	return xml;
 }
 
-//rename this!
 export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	const updated = { ...item };
 
@@ -92,9 +107,7 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	}
 	if (item.image) {
 		if (Array.isArray(item.image)) {
-			updated['image:image'] = item.image.map(obj =>
-				prefixKeysInObject(obj, 'image'),
-			);
+			updated['image:image'] = item.image.map(obj => prefixKeysInObject(obj, 'image'));
 			delete updated.image;
 		}
 		if (typeof item.image === 'object' && !Array.isArray(item.image)) {
@@ -118,10 +131,7 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 					// $FlowFixMe
 					obj.family_friendly = boolToText(obj.family_friendly);
 				}
-				if (
-					obj.requires_subscription !== null ||
-					obj.requires_subscription !== undefined
-				) {
+				if (obj.requires_subscription !== null || obj.requires_subscription !== undefined) {
 					// $FlowFixMe
 					obj.requires_subscription = boolToText(obj.requires_subscription);
 				}
@@ -133,9 +143,7 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 			});
 			// prefix keys
 			// $FlowFixMe
-			updated['video:video'] = item.video.map(obj =>
-				prefixKeysInObject(obj, 'video'),
-			);
+			updated['video:video'] = item.video.map(obj => prefixKeysInObject(obj, 'video'));
 			delete updated.video;
 		}
 		if (typeof item.video === 'object' && !Array.isArray(item.video)) {
@@ -148,21 +156,13 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 				// $FlowFixMe
 				item.video.publication_date = item.video.publication_date.toISOString();
 			}
-			if (
-				item.video.family_friendly !== null ||
-				item.video.family_friendly !== undefined
-			) {
+			if (item.video.family_friendly !== null || item.video.family_friendly !== undefined) {
 				// $FlowFixMe
 				item.video.family_friendly = boolToText(item.video.family_friendly);
 			}
-			if (
-				item.video.requires_subscription !== null ||
-				item.video.requires_subscription !== undefined
-			) {
+			if (item.video.requires_subscription !== null || item.video.requires_subscription !== undefined) {
 				// $FlowFixMe
-				item.video.requires_subscription = boolToText(
-					item.video.requires_subscription,
-				);
+				item.video.requires_subscription = boolToText(item.video.requires_subscription);
 			}
 			if (item.video.live !== null || item.video.live !== undefined) {
 				// $FlowFixMe
@@ -177,21 +177,46 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	return updated;
 }
 
-function createXML(objToXml: Object): string {
+export function newsSiteMapDataMapper(item: RawNewsSiteMapData): MappedNewsSiteMapData {
+	const updated = { ...item };
+	if (item.news) {
+		if (item.news.publication) {
+			updated.news.publication = prefixKeysInObject(item.news.publication, 'news');
+		}
+		if (item.news.publication_date) {
+			item.news.publication_date = item.news.publication_date.toISOString();
+		}
+		if (item.news.genres && Array.isArray(item.news.genres)) {
+			item.news.genres = item.news.genres.join(', ');
+		}
+		if (item.news.keywords && Array.isArray(item.news.keywords)) {
+			item.news.keywords = item.news.keywords.join(', ');
+		}
+		if (item.news.stock_tickers && Array.isArray(item.news.stock_tickers)) {
+			item.news.stock_tickers = item.news.stock_tickers.join(', ');
+		}
+		updated['news:news'] = prefixKeysInObject(item.news, 'news');
+		delete updated.news;
+	}
+
+	return updated;
+}
+
+export function createXML(objToXml: Object): string {
 	return xmlbuilder.create(objToXml, { encoding: 'UTF-8' }).end();
 }
 
-function prefixKeysInObject(obj: Object, prefix: string): Object {
+export function prefixKeysInObject(obj: Object, prefix: string): Object {
 	obj = Object.assign(
 		// $FlowFixMe
 		...Object.keys(obj).map(key => ({
 			[`${prefix}:${key.toString()}`]: obj[key],
-		})),
+		}))
 	);
 	return obj;
 }
 
-function boolToText(bool: boolean): string {
+export function boolToText(bool: boolean): string {
 	if (bool) {
 		return 'yes';
 	}

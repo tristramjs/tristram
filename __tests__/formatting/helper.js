@@ -3,13 +3,17 @@ import {
 	siteMapDataMapper,
 	createSitemap,
 	createIndexSitemap,
+	createXML,
+	prefixKeysInObject,
+	boolToText,
+	newsSiteMapDataMapper,
 } from '../../src/formatting/helper';
 
 describe('Helper Formatting Module', () => {
-	const date = new Date();
+	const date = new Date('2009-11-05T19:20:30+08:00');
 	test('siteMapDataMapper', () => {
 		const loc = 'http://foo.bar';
-		const image = [{ loc }, { loc }];
+		const image = [ { loc }, { loc } ];
 		const video = [
 			{
 				thumbnail_loc: loc,
@@ -26,7 +30,7 @@ describe('Helper Formatting Module', () => {
 		const expectedOutput = {
 			loc,
 			lastmod: date.toISOString(),
-			'image:image': [{ 'image:loc': loc }, { 'image:loc': loc }],
+			'image:image': [ { 'image:loc': loc }, { 'image:loc': loc } ],
 			'video:video': [
 				{
 					'video:thumbnail_loc': loc,
@@ -42,6 +46,45 @@ describe('Helper Formatting Module', () => {
 		};
 		expect(siteMapDataMapper(data)).toEqual(expectedOutput);
 	});
+	test('newsSiteMapDataMapper', () => {
+		const loc = 'http://foo.bar';
+		const publication = {
+			name: 'test',
+			language: 'en',
+		};
+		const genres = [ 'Blog', 'Opinion' ];
+		const publication_date = date;
+		const keywords = [ 'this', 'is', 'a', 'test' ];
+		const stock_tickers = [ 'NASDAQ:A', 'NASDAQ:B' ];
+		const data = {
+			loc,
+			news: {
+				publication,
+				genres,
+				title: 'test',
+				publication_date,
+				keywords,
+				stock_tickers,
+			},
+		};
+
+		const expectedOutput = {
+			loc,
+			'news:news': {
+				'news:publication': {
+					'news:name': 'test',
+					'news:language': 'en',
+				},
+				'news:genres': 'Blog, Opinion',
+				'news:title': 'test',
+				'news:publication_date': date.toISOString(),
+				'news:keywords': 'this, is, a, test',
+				'news:stock_tickers': 'NASDAQ:A, NASDAQ:B',
+			},
+		};
+
+		expect(newsSiteMapDataMapper(data)).toEqual(expectedOutput);
+	});
 	test('createSitemap', () => {
 		const xml = createSitemap([
 			{
@@ -50,15 +93,22 @@ describe('Helper Formatting Module', () => {
 				priority: 0.5,
 				changefreq: 'never',
 			},
-		]); //mising data
-		expect(xml).toBe(
-			`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"><url><loc>http://foo.bar</loc><lastmod>${date.toISOString()}</lastmod><priority>0.5</priority><changefreq>never</changefreq></url></urlset>`,
-		);
+		]);
+		expect(xml).toMatchSnapshot();
 	});
 	test('createIndexSitemap', () => {
 		const xml = createIndexSitemap(1, 'foo.bar', 'sitemaps');
-		expect(xml).toEqual(
-			'<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://foo.bar/sitemaps/sitemap-1.xml</loc></sitemap></sitemapindex>',
-		);
+		expect(xml).toMatchSnapshot();
+	});
+	test('createXML', () => {
+		expect(createXML({ test: 123 })).toMatchSnapshot();
+	});
+	test('prefixKeysInObject', () => {
+		const obj = { test: 'test' };
+		const res = { ['test:test']: 'test' };
+		expect(prefixKeysInObject(obj, 'test')).toEqual(res);
+	});
+	test('boolToText', () => {
+		expect(boolToText(true)).toBe('yes');
 	});
 });
