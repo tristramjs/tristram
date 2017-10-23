@@ -5,6 +5,7 @@ import xmlbuilder from 'xmlbuilder';
 import type { RawSiteMapData, RawNewsSiteMapData } from '../main';
 
 export type MappedSiteMapData = {
+	// details read: https://developers.google.com/webmasters/videosearch/sitemaps
 	loc: string,
 	lastmod?: string,
 	priority?: number,
@@ -30,7 +31,7 @@ export type MappedSiteMapData = {
 		'video:family_friendly'?: string,
 		'video:tag'?: string[],
 		'video:category'?: string,
-		'video:restriction'?: { '@relationship': 'allow' | 'deny', '#text': string }, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
+		'video:restriction'?: { '@relationship': 'allow' | 'deny', '#text': string },
 		'video:gallery_loc'?: { '@title'?: string, '#text': string },
 		'video:price'?: { '#text': number, '@currency': string, '@type'?: 'rent' | 'own', '@resolution'?: 'HD' | 'SD' }[],
 		'video:requires_subscription'?: string,
