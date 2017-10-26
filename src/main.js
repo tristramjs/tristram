@@ -103,7 +103,12 @@ export default class Main {
 	}
 
 	async run() {
-		const data = await Promise.all(this.fetchers.map(f => f.getData()));
+		let data = await Promise.all(this.fetchers.map(f => f.getData()));
+
+		// formatter expects a flat array
+		if (Array.isArray(data[0])) {
+			data = data.reduce((a, b) => a.concat(b), []);
+		}
 
 		// $FlowFixMe
 		return this.formatter.format(data);

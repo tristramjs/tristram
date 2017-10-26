@@ -40,7 +40,10 @@ export default class PlainFormatter implements Formatter<OptionsWithDefaults> {
 			// $FlowFixMe
 			return [ createSitemap(data) ];
 		}
-		const numberSitemaps = data.length / this.options.maxItemsPerSitemap;
+		const numberSitemaps =
+			data.length % this.options.maxItemsPerSitemap === 0
+				? data.length / this.options.maxItemsPerSitemap
+				: Math.floor(data.length / this.options.maxItemsPerSitemap) + 1;
 		const output = [ createIndexSitemap(numberSitemaps, this.options.hostname, this.options.path) ];
 
 		// is this in any way possible in object orientated style?
@@ -75,7 +78,10 @@ export class NewsSiteMapFormatter implements Formatter<OptionsWithDefaults> {
 		if (data.length < this.options.maxItemsPerSitemap) {
 			return [ createNewsSitemap(data) ];
 		}
-		const numberSitemaps = data.length / this.options.maxItemsPerSitemap;
+		const numberSitemaps =
+			data.length % this.options.maxItemsPerSitemap === 0
+				? data.length / this.options.maxItemsPerSitemap
+				: Math.floor(data.length / this.options.maxItemsPerSitemap) + 1;
 		// TODO news!
 		const output = [ createIndexSitemap(numberSitemaps, this.options.hostname, this.options.path) ];
 
