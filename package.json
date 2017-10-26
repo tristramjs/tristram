@@ -4,9 +4,7 @@
 	"description": "A pipeline for sitemap generation",
 	"main": "index.js",
 	"scripts": {
-		"test": "jest",
-		"test-update": "jest -u",
-		"postinstall": "flow-typed install"
+		"test": "jest"
 	},
 	"repository": {
 		"type": "git",
@@ -27,7 +25,8 @@
 		"flow-bin": "^0.56.0",
 		"flow-typed": "^2.1.5",
 		"jest": "^21.1.0",
-		"jest-cli": "^21.2.1"
+		"jest-cli": "^21.2.1",
+		"node-mocks-http": "^1.6.6"
 	},
 	"dependencies": {
 		"@sep/eslint-config-sep": "^1.0.20",
