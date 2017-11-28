@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Helper Formatting Module createIndexSitemap 1`] = `"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><sitemapindex xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\"><sitemap><loc>https://foo.bar/sitemaps/sitemap-1.xml</loc></sitemap></sitemapindex>"`;
+
+exports[`Helper Formatting Module createSitemap 1`] = `"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><urlset xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\" xmlns:image=\\"http://www.google.com/schemas/sitemap-image/1.1\\" xmlns:video=\\"http://www.google.com/schemas/sitemap-video/1.1\\"><url><loc>http://foo.bar</loc><lastmod>2009-11-05T11:20:30.000Z</lastmod><priority>0.5</priority><changefreq>never</changefreq></url></urlset>"`;
+
+exports[`Helper Formatting Module createXML 1`] = `"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><test>123</test>"`;
