@@ -2,7 +2,6 @@
 
 // TODO:
 // - formatter only has one property. Should we add some functionality from helper.js as formatter properties?
-// - build an integrated pipeline with express
 // - fix flow....
 
 import type { RawSiteMapData, OptionsWithDefaults } from '../main';

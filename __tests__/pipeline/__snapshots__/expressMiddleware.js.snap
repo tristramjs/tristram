@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expressMiddleware return indexSitemap if valid indexSitemap request 1`] = `"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><sitemapindex xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\"><sitemap><loc>https://localhost/sitemaps/sitemap-2.xml</loc></sitemap><sitemap><loc>https://localhost/sitemaps/sitemap-1.xml</loc></sitemap></sitemapindex>"`;
+
+exports[`expressMiddleware return sitemap if valid sitemap request 1`] = `"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><urlset xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\" xmlns:image=\\"http://www.google.com/schemas/sitemap-image/1.1\\" xmlns:video=\\"http://www.google.com/schemas/sitemap-video/1.1\\"><url><loc>http://url1.bar</loc></url><url><loc>http://url2.bar</loc></url></urlset>"`;
