@@ -12,7 +12,10 @@
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": ["sitemap", "seo"],
+	"keywords": [
+		"sitemap",
+		"seo"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -31,7 +34,9 @@
 	},
 	"dependencies": {
 		"@sep/eslint-config-sep": "^1.0.20",
-		"node-fetch": "^1.7.3",
+		"es6-promise": "^4.1.1",
+		"fetch-mock": "^5.13.1",
+		"isomorphic-fetch": "^2.2.1",
 		"xmlbuilder": "^9.0.4"
 	}
 }

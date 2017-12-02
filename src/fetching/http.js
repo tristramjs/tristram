@@ -1,5 +1,6 @@
 /* @flow */
-import fetch from 'node-fetch';
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 import type { Fetcher } from './index';
 import type { RawSiteMapData } from '../main';
 

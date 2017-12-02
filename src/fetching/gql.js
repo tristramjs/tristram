@@ -11,7 +11,7 @@ type Props = {
 	getConnection?: any => any,
 };
 
-export default class GraphQlFetcher implements Fetcher {
+export default class GqlFetcher implements Fetcher {
 	url: string;
 	httpFetcher: HttpFetcher<*>;
 	t: any => RawSiteMapData;
@@ -26,7 +26,7 @@ export default class GraphQlFetcher implements Fetcher {
 		this.httpFetcher = new HttpFetcher({ url, t, fetchOptions });
 	}
 
-	async getData() {
+	async getData(): Promise<RawSiteMapData> {
 		return await this.httpFetcher.getData();
 	}
 }

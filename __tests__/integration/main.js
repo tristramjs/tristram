@@ -1,7 +1,7 @@
 /* @flow */
 import Main from '../../src/main';
 import HttpFetcher from '../../src/fetching/http';
-import GraphQlFetcher from '../../src/fetching/graphQl';
+import GraphQlFetcher from '../../src/fetching/gql';
 import PlainFormatter from '../../src/formatting';
 
 describe('Main / Integration Tests', () => {
