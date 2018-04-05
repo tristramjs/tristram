@@ -1,19 +1,22 @@
 /* @flow */
-import type { Fetcher } from './fetching';
-import type { Formatter } from './formatting';
-import PlainFormatter from './formatting';
+require('@babel/polyfill');
 
-type Props = {
-	fetchers: Fetcher[],
-	formatter: Formatter<Options>,
-	options: Options,
-};
+import type { Fetcher, ChunkFetcher } from './fetching';
+import type { Writer } from './persistence/index';
+import type { RawSiteMapData } from './types/sitemap';
+import FileWriter from './persistence/FileWriter';
 
 export type Options = {
 	hostname: string,
 	path?: string,
 	cacheTime?: number,
 	maxItemsPerSitemap?: number,
+};
+
+type Props = {
+	fetchers: ChunkFetcher[],
+	options: Options,
+	writer: Writer,
 };
 
 export type OptionsWithDefaults = {
@@ -23,94 +26,60 @@ export type OptionsWithDefaults = {
 	path: string,
 };
 
-export type imageData = {
-	loc: string,
-	caption?: string,
-	geo_location?: string,
-	title?: string,
-	license?: string,
-};
-
-export type videoData = {
-	thumbnail_loc: string,
-	title: string,
-	description: string,
-	content_loc?: string,
-	player_loc?: { loc: string, autoplay?: string },
-	duration?: string,
-	expiration_date?: Date,
-	rating?: number,
-	view_count?: number,
-	publication_date?: Date,
-	family_friendly?: boolean,
-	tag?: string[],
-	category?: string,
-	restriction?: {
-		relationship: 'allow' | 'deny',
-		countrys: string[],
-	}, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
-	gallery_loc?: {
-		url: string,
-		title?: string,
-	},
-	price?: { amount: number, currency: string, type?: 'rent' | 'own', resolution?: 'HD' | 'SD' }[],
-	requires_subscription?: boolean,
-	uploader?: { name: string, info?: string },
-	platform?: { countrys: string[], relationship: 'allow' | 'deny' },
-	live?: boolean,
-};
-
-export type RawSiteMapData = {
-	loc: string,
-	lastmod?: Date,
-	priority?: number,
-	changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never',
-	image?: imageData[],
-	video?: videoData[],
-};
-
-type newsGenres = 'Blog' | 'OpEd' | 'Opinion' | 'PressRelease' | 'Satire' | 'UserGenerated';
-
-export type RawNewsSiteMapData = {
-	loc: string,
-	news: {
-		publication: {
-			name: string,
-			language: string,
-		},
-		genres?: newsGenres | newsGenres[],
-		publication_date: Date,
-		title: string,
-		keywords?: string | string[],
-		stock_tickers?: string | string[],
-	},
-};
+type Sitemap = string;
 
 export default class Main {
-	fetchers: Fetcher[];
-	formatter: Formatter<Options>;
-	options: Options;
+	fetchers: ChunkFetcher[];
+	options: OptionsWithDefaults;
+	writer: Writer;
+	sitemaps: Sitemap[];
+	currentItemCount: number;
 
-	constructor({ fetchers, formatter, options }: Props) {
+	constructor({ fetchers, options, writer }: Props) {
 		this.fetchers = fetchers;
-		this.formatter = formatter;
-		this.options = ({
-			maxItemsPerSitemap: (50000: number),
-			path: 'sitemaps',
+		this.writer = writer || new FileWriter();
+		this.sitemaps = [];
+		this.currentItemCount = 0;
+
+		this.options = {
+			maxItemsPerSitemap: 50000,
 			...options,
-			// $FlowFixMe
-		}: OptionsWithDefaults);
+		};
 	}
 
 	async run() {
-		let data = await Promise.all(this.fetchers.map(f => f.getData()));
+		await this.createSitemap(`${process.cwd()}/tmp/sitemap-0.xml`);
 
-		// formatter expects a flat array
-		if (Array.isArray(data[0])) {
-			data = data.reduce((a, b) => a.concat(b), []);
+		for (const fetcher of this.fetchers) {
+			for await (const data of fetcher.getDataChunk()) {
+				await this.saveChunk(data);
+			}
 		}
 
-		// $FlowFixMe
-		return this.formatter.format(data);
+		await this.writer.commitSitemap();
+	}
+
+	async saveChunk(data: RawSiteMapData[]) {
+		if (this.currentItemCount > this.options.maxItemsPerSitemap - 1) {
+			await this.writer.commitSitemap();
+			await this.createSitemap(`${process.cwd()}/tmp/sitemap-${this.sitemaps.length}.xml`);
+			this.currentItemCount = 0;
+		}
+		await this.writeChunk(data);
+	}
+
+	async createSitemap(path: string) {
+		try {
+			await this.writer.createSitemap(path);
+			this.sitemaps.push(path);
+		} catch (err) {
+			console.error('Could not create sitemap!');
+			console.error(err);
+		}
+	}
+
+	async writeChunk(data: RawSiteMapData[]) {
+		await this.writer.writeChunk(data);
+		this.currentItemCount = this.currentItemCount + 1;
 	}
 }

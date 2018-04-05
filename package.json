@@ -5,8 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
-		"test-update": "jest -u",
-		"postinstall": "flow-typed install"
+		"test-update": "jest -u"
 	},
 	"repository": {
 		"type": "git",
@@ -23,17 +22,26 @@
 	},
 	"homepage": "https://github.com/sambou/tristram#readme",
 	"devDependencies": {
-		"babel-plugin-transform-class-properties": "^6.24.1",
-		"babel-plugin-transform-flow-strip-types": "^6.22.0",
-		"babel-plugin-transform-object-rest-spread": "^6.26.0",
-		"babel-preset-env": "^1.6.0",
+		"@babel/core": "^7.0.0-beta.44",
+		"@babel/plugin-proposal-async-generator-functions": "^7.0.0-beta.44",
+		"@babel/plugin-syntax-async-generators": "^7.0.0-beta.44",
+		"@babel/plugin-transform-flow-strip-types": "^7.0.0-beta.44",
+		"@babel/polyfill": "^7.0.0-beta.44",
+		"@babel/preset-env": "^7.0.0-beta.44",
+		"@babel/preset-stage-3": "^7.0.0-beta.44",
+		"@sep/eslint-config-sep": "^2.0.6",
+		"babel-core": "^7.0.0-0",
+		"babel-jest": "^22.4.3",
+		"eslint": "^4.17.0",
+		"eslint-plugin-eslint-comments": "^2.0.2",
+		"eslint-plugin-flowtype": "^2.42.0",
+		"eslint-plugin-import": "^2.8.0",
 		"flow-bin": "^0.56.0",
 		"flow-typed": "^2.1.5",
-		"jest": "^21.1.0",
-		"jest-cli": "^21.2.1"
+		"jest": "^22.4.0",
+		"jest-cli": "^22.4.0"
 	},
 	"dependencies": {
-		"@sep/eslint-config-sep": "^1.0.20",
 		"es6-promise": "^4.1.1",
 		"fetch-mock": "^5.13.1",
 		"isomorphic-fetch": "^2.2.1",

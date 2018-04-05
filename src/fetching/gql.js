@@ -1,32 +1,33 @@
 /* @flow */
-import type { Fetcher } from './index';
-import type { RawSiteMapData } from '../main';
+import type { RawSiteMapData } from '../types/sitemap';
+
 import HttpFetcher from './http';
 
-type Props = {
-	url: string,
-	t: any => RawSiteMapData,
+import type { Fetcher, FetcherProps } from './index';
+
+type Props<T> = FetcherProps<T> & {
 	query: string,
 	variables?: {},
-	getConnection?: any => any,
 };
 
-export default class GqlFetcher implements Fetcher {
+export default class GraphqlFetcher<T> implements Fetcher {
 	url: string;
 	httpFetcher: HttpFetcher<*>;
-	t: any => RawSiteMapData;
+	transformResult: any => RawSiteMapData;
 
-	constructor({ url, t, query, variables }: Props) {
+	constructor({
+		url, transformResult, query, variables,
+	}: Props<T>) {
 		const fetchOptions = {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({ query, variables: variables || null }),
 		};
 
-		this.httpFetcher = new HttpFetcher({ url, t, fetchOptions });
+		this.httpFetcher = new HttpFetcher({ url, transformResult, fetchOptions });
 	}
 
-	async getData(): Promise<RawSiteMapData> {
-		return await this.httpFetcher.getData();
+	async getData() {
+		return this.httpFetcher.getData();
 	}
 }

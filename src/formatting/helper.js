@@ -2,7 +2,7 @@
 
 import xmlbuilder from 'xmlbuilder';
 
-import type { RawSiteMapData, RawNewsSiteMapData } from '../main';
+import type { RawSiteMapData, RawNewsSiteMapData } from '../types/sitemap';
 
 export type MappedSiteMapData = {
 	// details read: https://developers.google.com/webmasters/videosearch/sitemaps
@@ -120,7 +120,7 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	if (item.video) {
 		if (Array.isArray(item.video)) {
 			// fix all datatypes
-			item.video.map(obj => {
+			item.video.map((obj) => {
 				if (obj.expiration_date) {
 					// $FlowFixMe
 					obj.expiration_date = obj.expiration_date.toISOString();
@@ -158,8 +158,8 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 					}
 				}
 				if (obj.price) {
-					obj.price = obj.price.map(item => {
-						let rvalue = { '#text': item.amount, '@currency': item.currency };
+					obj.price = obj.price.map((item) => {
+						const rvalue = { '#text': item.amount, '@currency': item.currency };
 						if (item.type) {
 							rvalue['@type'] = item.type;
 						}
@@ -235,8 +235,8 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 				}
 			}
 			if (item.video.price) {
-				item.video.price = item.video.price.map(item => {
-					let rvalue = { '#text': item.amount, '@currency': item.currency };
+				item.video.price = item.video.price.map((item) => {
+					const rvalue = { '#text': item.amount, '@currency': item.currency };
 					if (item.type) {
 						rvalue['@type'] = item.type;
 					}

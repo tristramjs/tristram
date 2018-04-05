@@ -1,4 +1,18 @@
 {
-	"presets": ["env"],
-	"plugins": ["transform-flow-strip-types", "transform-object-rest-spread", "transform-class-properties"]
+	"presets": [
+		[
+			"@babel/preset-env",
+			{
+				"targets": {
+					"node": "8.10"
+				}
+			}
+		],
+		"@babel/preset-stage-3"
+	],
+	"plugins": [
+		"@babel/plugin-transform-flow-strip-types",
+		"@babel/plugin-syntax-async-generators",
+		"@babel/plugin-proposal-async-generator-functions"
+	]
 }

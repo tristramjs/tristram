@@ -9,7 +9,7 @@ const options = {
 	path: 'sitemaps',
 };
 
-describe('Formatting Module', () => {
+xdescribe('Formatting Module', () => {
 	const formatter = new PlainFormatter({ options });
 	it('should initalize', () => {
 		expect(formatter).toBeInstanceOf(PlainFormatter);
