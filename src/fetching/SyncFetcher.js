@@ -10,10 +10,9 @@ export default class SyncFetcher implements ChunkFetcher {
 		this.data = data;
 	}
 
-	* getDataChunk() {
-		// const data = await test(this.data);
-		// console.log(data);
-		yield Promise.resolve(this.data);
+	async* getDataChunk() {
+		const data = await test(this.data);
+		yield data;
 	}
 }
 

@@ -21,9 +21,9 @@ describe('Main module', () => {
 
 		const chunkFetcher: ChunkFetcher = {
 			async* getDataChunk() {
-				yield await Promise.resolve([ { loc: 'foo' } ]);
-				yield await Promise.resolve([ { loc: 'bar' } ]);
-				yield await Promise.resolve([ { loc: 'baz' } ]);
+				yield [ { loc: 'foo' } ];
+				yield [ { loc: 'bar' } ];
+				yield [ { loc: 'baz' } ];
 			},
 		};
 
