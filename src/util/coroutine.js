@@ -5,7 +5,7 @@
  * returns a generator object that is immediately
  * ready for input via `next()`
  */
-export default function coroutine(generatorFunction: () => AsyncGenerator<*, *, *>) {
+export default function coroutine(generatorFunction: any) {
 	return function cb(...args: any) {
 		const generatorObject = generatorFunction(...args);
 		generatorObject.next();

@@ -30,8 +30,8 @@ describe('FileWriter', () => {
 	it('write a sitemap in chunks to the file system', async () => {
 		const fw = new FileWriter();
 		await fw.createSitemap(`${process.cwd()}/tmp/bla.xml`);
-		await fw.writeChunk({ foo: 'bar' });
-		await fw.writeChunk({ baz: 'bar' });
+		await fw.writeChunk({ loc: 'foo' });
+		await fw.writeChunk({ loc: 'bar' });
 		fw.commitSitemap();
 	});
 

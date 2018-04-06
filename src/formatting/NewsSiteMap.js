@@ -1,23 +1,23 @@
 /* @flow */
 import type { OptionsWithDefaults } from '../main';
 
-import type { Formatter } from './index';
+import { newsSiteMapDataMapper, createIndexSitemap, createNewsSitemap } from './helper';
 
-export default class NewsSiteMapFormatter implements Formatter<OptionsWithDefaults> {
+import type { Formatter, Props } from './index';
+
+export default class NewsSiteMapFormatter implements Formatter {
 	options: OptionsWithDefaults;
 
 	constructor({ options }: Props) {
 		this.options = options;
 		if (this.options.maxItemsPerSitemap > 1000) {
-			/* eslint-disable */
 			console.log(
 				"Google won't allow single news sitemaps with more than 1000 articles. You will receive a number of news sitemaps and a index sitemap."
 			);
-			/* eslint-enable */
 			this.options.maxItemsPerSitemap = 1000;
 		}
 	}
-	format(data) {
+	format(data: any) {
 		// bring data into right format
 		data = data.map(item => newsSiteMapDataMapper(item));
 
