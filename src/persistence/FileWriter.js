@@ -1,31 +1,22 @@
 /* @flow */
 import fs from 'fs';
-import util from 'util';
 
+import { appendFile, writeFile } from '../util/fs';
 import type { RawSiteMapData } from '../types/sitemap';
 
 import appendToXml from './appendToXml';
 
 import type { Writer } from './index';
 
-const appendFile = util.promisify(fs.appendFile);
-
 export default class FileWriter implements Writer {
-	sitemap: AsyncGenerator<void, void, RawSiteMapData[]>;
+	sitemap: AsyncGenerator<void, void, RawSiteMapData>;
 
 	async createSitemap(path: string) {
-		return new Promise((resolve, reject) => {
-			fs.writeFile(path, '', (err) => {
-				if (!err) {
-					this.sitemap = appendToXml(data => appendFile(path, data));
-					resolve();
-				}
-				reject(err);
-			});
-		});
+		await writeFile(path, '');
+		this.sitemap = appendToXml(data => appendFile(path, data));
 	}
 
-	async writeChunk(data: RawSiteMapData[]) {
+	async writeChunk(data: RawSiteMapData) {
 		if (this.sitemap) {
 			await this.sitemap.next(data);
 		} else {

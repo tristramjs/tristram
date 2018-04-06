@@ -6,18 +6,15 @@ import type { ChunkFetcher } from './index';
 export default class SyncFetcher implements ChunkFetcher {
 	data: RawSiteMapData | RawSiteMapData[];
 
-	constructor({ data }: any) {
+	constructor({ data }: { data: RawSiteMapData | RawSiteMapData[] }) {
 		this.data = data;
 	}
 
-	async* getDataChunk() {
-		const data = await test(this.data);
-		yield data;
+	async* getData(): AsyncIterator<RawSiteMapData[]> {
+		if (Array.isArray(this.data)) {
+			yield this.data;
+		} else {
+			yield [ this.data ];
+		}
 	}
-}
-
-function test(data) {
-	return new Promise((resolve) => {
-		setTimeout(() => resolve(data), 1000);
-	});
 }

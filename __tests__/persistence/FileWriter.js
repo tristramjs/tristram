@@ -1,23 +1,39 @@
 /* @flow */
-import fs from 'fs';
-
+import { exists, mkdir, readdir, unlink, rmdir } from '../../src/util/fs';
 import FileWriter from '../../src/persistence/FileWriter';
 
-describe('FileWriter', () => {
-	beforeAll(() => {
-		if (!fs.existsSync('./tmp')) {
-			fs.mkdirSync('./tmp');
+const path = './tmp';
+
+async function setup() {
+	const folder = await exists(path);
+	if (!folder) {
+		await mkdir(path);
+	}
+}
+
+async function cleanup() {
+	const folder = await exists(path);
+	if (folder) {
+		const files = await readdir('./tmp');
+
+		for (const file of files) {
+			await unlink(`./tmp/${file}`);
 		}
-	});
+
+		await rmdir('./tmp');
+	}
+}
+
+describe('FileWriter', () => {
+	beforeAll(setup);
 
 	it('write a sitemap in chunks to the file system', async () => {
 		const fw = new FileWriter();
 		await fw.createSitemap(`${process.cwd()}/tmp/bla.xml`);
-		[ { foo: 'bar' }, { baz: 'bar' } ].forEach(data => fw.writeChunk(data));
+		await fw.writeChunk({ foo: 'bar' });
+		await fw.writeChunk({ baz: 'bar' });
 		fw.commitSitemap();
 	});
 
-	afterAll(() => {
-		// fs.unlink(`${process.cwd()}/tmp/bla.xml`);
-	});
+	afterAll(cleanup);
 });

@@ -1,56 +1,81 @@
 /* @flow */
+import fetchMock from 'fetch-mock';
+
+import { exists, mkdir, readdir, readfile, unlink, rmdir } from '../../src/util/fs';
 import Main from '../../src/main';
-import HttpFetcher from '../../src/fetching/http';
-import GraphQlFetcher from '../../src/fetching/gql';
-import PlainFormatter from '../../src/formatting';
+import SyncFetcher from '../../src/fetching/SyncFetcher';
+import RelayConnectionFetcher from '../../src/fetching/RelayConnection';
+import FileWriter from '../../src/persistence/FileWriter';
 
-describe('Main / Integration Tests', () => {
-	describe('Restful fetching', () => {
-		it('should fetch and transform data into a valid sitemap', async () => {
-			const url = 'https://api.github.com/users/octocat';
-			const t = ({ url, created_at }) => ({ loc: url, lastmod: new Date(created_at) });
-			const fetcher = new HttpFetcher({ url, t });
-			const formatter = new PlainFormatter({
-				options: {
-					hostname: 'string',
-					cacheTime: 500,
-					maxItemsPerSitemap: 1000,
-					path: 'string',
-				},
-			});
-			const main = new Main({ fetchers: [ fetcher ], formatter, options: { hostname: '' } });
+const path = './tmp2';
 
-			const result = await main.run();
+async function setup() {
+	const folder = await exists(path);
+	if (!folder) {
+		await mkdir(path);
+	}
+}
 
-			expect(result).toMatchSnapshot();
+async function cleanup() {
+	const folder = await exists(path);
+	if (folder) {
+		const files = await readdir(path);
+
+		for (const file of files) {
+			await unlink(`${path}/${file}`);
+		}
+
+		await rmdir(path);
+	}
+	fetchMock.reset();
+}
+
+describe('Main module', () => {
+	beforeAll(setup);
+
+	it('should run without errors', async () => {
+		const options = { hostname: 'http://foo.bar', maxItemsPerSitemap: 2 };
+
+		const syncFetcher = new SyncFetcher({
+			data: [ { loc: 'quz' }, { loc: 'qaz' }, { loc: 'qak' } ],
 		});
-	});
 
-	describe('GraphQL fetcher', () => {
-		it('should fetch and transform data into a valid sitemap', async () => {
-			const url = 'https://1jzxrj179.lp.gql.zone/graphql';
-			const t = ({ data }) => data.posts.map(p => ({ loc: p.id }));
-			const query = /* GraphQL */ `
-				query Test {
-					posts {
-						id
+		const chunkFetcher = new RelayConnectionFetcher({
+			url: 'http://test.com/graphql',
+			query: /* GraphQL */ `query Test($first: Int!, $after: String) {
+				viewer {
+					allTestItems(first: $first, after: $after) {
+						pageInfo {
+							hasNext
+						}
+						edges {
+							cursor
+							node {
+								id
+							}
+						}
 					}
 				}
-			`;
-			const fetcher = new GraphQlFetcher({ url, t, query });
-			const formatter = new PlainFormatter({
-				options: {
-					hostname: 'string',
-					cacheTime: 500,
-					maxItemsPerSitemap: 1000,
-					path: 'string',
-				},
-			});
-			const main = new Main({ fetchers: [ fetcher ], formatter, options: { hostname: '' } });
-
-			const result = await main.run();
-
-			expect(result).toMatchSnapshot();
+			}`,
+			getConnection: conn => conn.data.viewer.allTestItems,
+			transformResult: ({ id }) => ({ loc: id }),
 		});
+
+		const main = new Main({
+			fetchers: [ syncFetcher, chunkFetcher ],
+			writer: new FileWriter(),
+			options,
+		});
+
+		await main.run();
+
+		const files = await readdir(path);
+		for (const file of files) {
+			expect(await readfile(`${path}/${file}`, 'utf8')).toMatchSnapshot();
+		}
+
+		expect(files.length).toBe(3);
 	});
+
+	afterAll(cleanup);
 });

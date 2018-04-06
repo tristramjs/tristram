@@ -17,12 +17,12 @@ type Props<T> = FetcherProps<T> & {
 type GetConnection<T> = <T>(x: Object) => GqlConnection<T>;
 type GqlConnection<T> = { edges: { node: T }[], pageInfo: { hasNext: boolean } };
 
-export default class RelayConnectionChunkFetcher<T> implements ChunkFetcher {
+export default class RelayConnection<T> implements ChunkFetcher {
 	gqlFetcher: typeof GqlFetcher;
 	url: string;
 	query: string;
 	chunkSize: number;
-	transformResult: any => RawSiteMapData;
+	transformResult: T => RawSiteMapData;
 	getConnection: GetConnection<T>;
 	variables: {
 		first: number,
@@ -41,7 +41,7 @@ export default class RelayConnectionChunkFetcher<T> implements ChunkFetcher {
 		this.chunkSize = chunkSize || 100;
 	}
 
-	async* getDataChunk(): AsyncGenerator<RawSiteMapData[], void, void> {
+	async* getData(): AsyncGenerator<RawSiteMapData[], void, void> {
 		let hasNext;
 
 		do {

@@ -6,7 +6,7 @@ export interface Fetcher {
 }
 
 export interface ChunkFetcher {
-	getDataChunk(): AsyncIterable<RawSiteMapData[]>;
+	getData(): AsyncIterable<RawSiteMapData[]>;
 }
 
 export interface FetcherProps<T> {

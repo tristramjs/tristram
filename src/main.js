@@ -1,7 +1,5 @@
 /* @flow */
-require('@babel/polyfill');
-
-import type { Fetcher, ChunkFetcher } from './fetching';
+import type { ChunkFetcher } from './fetching';
 import type { Writer } from './persistence/index';
 import type { RawSiteMapData } from './types/sitemap';
 import FileWriter from './persistence/FileWriter';
@@ -48,21 +46,23 @@ export default class Main {
 	}
 
 	async run() {
-		await this.createSitemap(`${process.cwd()}/tmp/sitemap-0.xml`);
+		await this.createSitemap(`${process.cwd()}/tmp2/sitemap-0.xml`);
 
 		for (const fetcher of this.fetchers) {
-			for await (const data of fetcher.getDataChunk()) {
-				await this.saveChunk(data);
+			for await (const data of fetcher.getData()) {
+				for (const sitemapData of data) {
+					await this.saveChunk(sitemapData);
+				}
 			}
 		}
 
 		await this.writer.commitSitemap();
 	}
 
-	async saveChunk(data: RawSiteMapData[]) {
+	async saveChunk(data: RawSiteMapData) {
 		if (this.currentItemCount > this.options.maxItemsPerSitemap - 1) {
 			await this.writer.commitSitemap();
-			await this.createSitemap(`${process.cwd()}/tmp/sitemap-${this.sitemaps.length}.xml`);
+			await this.createSitemap(`${process.cwd()}/tmp2/sitemap-${this.sitemaps.length}.xml`);
 			this.currentItemCount = 0;
 		}
 		await this.writeChunk(data);
@@ -78,7 +78,7 @@ export default class Main {
 		}
 	}
 
-	async writeChunk(data: RawSiteMapData[]) {
+	async writeChunk(data: RawSiteMapData) {
 		await this.writer.writeChunk(data);
 		this.currentItemCount = this.currentItemCount + 1;
 	}
