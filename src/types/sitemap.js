@@ -25,7 +25,8 @@ export type videoData = {
 	restriction?: {
 		relationship: 'allow' | 'deny',
 		countrys: string[],
-	}, // details read: https://developers.google.com/webmasters/videosearch/sitemaps
+	},
+	// details read: https://developers.google.com/webmasters/videosearch/sitemaps
 	gallery_loc?: {
 		url: string,
 		title?: string,
