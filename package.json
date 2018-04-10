@@ -11,7 +11,10 @@
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": ["sitemap", "seo"],
+	"keywords": [
+		"sitemap",
+		"seo"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -40,11 +43,14 @@
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.0.0-beta.44",
+		"aws-sdk": "^2.221.1",
 		"es6-promise": "4.2.4",
 		"isomorphic-fetch": "^2.2.1",
 		"xmlbuilder": "9.0.7"
 	},
 	"jest": {
-		"setupFiles": ["./config/jest.js"]
+		"setupFiles": [
+			"./config/jest.js"
+		]
 	}
 }

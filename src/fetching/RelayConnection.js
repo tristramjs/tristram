@@ -64,7 +64,7 @@ export default class RelayConnection<T> implements ChunkFetcher {
 		} while (hasNext);
 	}
 
-	async fetchConnection(): Object {
+	async fetchConnection(): Promise<GqlConnection<T>> {
 		const {
 			url, query, variables, getConnection,
 		} = this;
