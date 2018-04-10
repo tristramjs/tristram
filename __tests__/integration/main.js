@@ -1,37 +1,16 @@
 /* @flow */
-import fetchMock from 'fetch-mock';
 
-import { exists, mkdir, readdir, readfile, unlink, rmdir } from '../../src/util/fs';
+import { setup, cleanup } from '../__testHelpers__/fs';
+import { readdir, readfile } from '../../src/util/fs';
 import Main from '../../src/main';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
 import RelayConnectionFetcher from '../../src/fetching/RelayConnection';
 import FileWriter from '../../src/persistence/FileWriter';
 
-const path = './tmp2';
-
-async function setup() {
-	const folder = await exists(path);
-	if (!folder) {
-		await mkdir(path);
-	}
-}
-
-async function cleanup() {
-	const folder = await exists(path);
-	if (folder) {
-		const files = await readdir(path);
-
-		for (const file of files) {
-			await unlink(`${path}/${file}`);
-		}
-
-		await rmdir(path);
-	}
-	fetchMock.reset();
-}
+const path = `${process.cwd()}/MainIntegrationTest/`;
 
 describe('Main module', () => {
-	beforeAll(setup);
+	beforeAll(setup(path));
 
 	it('should run without errors', async () => {
 		const options = { hostname: 'http://foo.bar', maxItemsPerSitemap: 2 };
@@ -63,7 +42,7 @@ describe('Main module', () => {
 
 		const main = new Main({
 			fetchers: [ syncFetcher, chunkFetcher ],
-			writer: new FileWriter(),
+			writer: new FileWriter({ path: `${process.cwd()}/tmp/`, fileName: 'sitemap' }),
 			options,
 		});
 
@@ -77,5 +56,5 @@ describe('Main module', () => {
 		expect(files.length).toBe(3);
 	});
 
-	afterAll(cleanup);
+	afterAll(cleanup(path));
 });

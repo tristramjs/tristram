@@ -2,7 +2,6 @@
 import type { ChunkFetcher } from './fetching';
 import type { Writer } from './persistence/index';
 import type { RawSiteMapData } from './types/sitemap';
-import FileWriter from './persistence/FileWriter';
 
 export type Options = {
 	hostname: string,
@@ -35,7 +34,7 @@ export default class Main {
 
 	constructor({ fetchers, options, writer }: Props) {
 		this.fetchers = fetchers;
-		this.writer = writer || new FileWriter();
+		this.writer = writer;
 		this.sitemaps = [];
 		this.currentItemCount = 0;
 
@@ -46,8 +45,7 @@ export default class Main {
 	}
 
 	async run() {
-		// pass in options for paths @Sami
-		await this.createSitemap(`${process.cwd()}/tmp2/sitemap-0.xml`);
+		await this.createSitemap();
 
 		for (const fetcher of this.fetchers) {
 			for await (const data of fetcher.getData()) {
@@ -64,16 +62,15 @@ export default class Main {
 	async saveChunk(data: RawSiteMapData[]) {
 		if (this.currentItemCount > this.options.maxItemsPerSitemap - 1) {
 			await this.writer.commitSitemap();
-			// pass in options for paths @Sami
-			await this.createSitemap(`${process.cwd()}/tmp2/sitemap-${this.sitemaps.length}.xml`);
+			await this.createSitemap();
 			this.currentItemCount = 0;
 		}
 		await this.writeChunk(data);
 	}
 
-	async createSitemap(path: string) {
+	async createSitemap() {
 		try {
-			await this.writer.createSitemap(path);
+			const path = await this.writer.createSitemap();
 			this.sitemaps.push(path);
 		} catch (err) {
 			console.error('Could not create sitemap!');
@@ -83,7 +80,6 @@ export default class Main {
 
 	async writeChunk(data: RawSiteMapData[]) {
 		await this.writer.writeChunk(data);
-		// calculate item count correctly @Sami
-		this.currentItemCount = this.currentItemCount + 1;
+		this.currentItemCount = this.currentItemCount + data.length;
 	}
 }

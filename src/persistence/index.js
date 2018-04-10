@@ -2,7 +2,7 @@
 import type { RawSiteMapData } from '../types/sitemap';
 
 export interface Writer {
-	createSitemap(path: string): Promise<void>;
+	createSitemap(): Promise<string>;
 	writeChunk(data: RawSiteMapData[]): Promise<void>;
 	commitSitemap(): Promise<void>;
 }

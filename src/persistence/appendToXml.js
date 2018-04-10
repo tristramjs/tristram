@@ -26,6 +26,8 @@ async function* appendToXmlGenerator(cb: (data: string) => Promise<*>): AsyncGen
 	}
 }
 
-const appendToXml = coroutine(appendToXmlGenerator);
+const appendToXml: (cb: (data: string) => Promise<*>) => AsyncGenerator<void, void, RawSiteMapData[]> = coroutine(
+	appendToXmlGenerator
+);
 
 export default appendToXml;

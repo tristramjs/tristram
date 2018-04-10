@@ -15,7 +15,7 @@ type Props<T> = FetcherProps<T> & {
 };
 
 type GetConnection<T> = <T>(x: Object) => GqlConnection<T>;
-type GqlConnection<T> = { edges: { node: T }[], pageInfo: { hasNext: boolean } };
+type GqlConnection<T> = { edges: { node: T, cursor: string }[], pageInfo: { hasNext: boolean } };
 
 export default class RelayConnection<T> implements ChunkFetcher {
 	gqlFetcher: typeof GqlFetcher;
@@ -46,7 +46,7 @@ export default class RelayConnection<T> implements ChunkFetcher {
 
 		do {
 			try {
-				const data = await this.fetchConnection();
+				const data: GqlConnection<T> = await this.fetchConnection();
 
 				yield data.edges.map(edge => this.transformResult(edge.node));
 				({ hasNext } = data.pageInfo);

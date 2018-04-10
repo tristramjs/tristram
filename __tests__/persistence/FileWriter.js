@@ -1,39 +1,29 @@
 /* @flow */
-import { exists, mkdir, readdir, unlink, rmdir } from '../../src/util/fs';
+import { setup, cleanup } from '../__testHelpers__/fs';
+import { readdir } from '../../src/util/fs';
 import FileWriter from '../../src/persistence/FileWriter';
 
-const path = './tmp';
-
-async function setup() {
-	const folder = await exists(path);
-	if (!folder) {
-		await mkdir(path);
-	}
-}
-
-async function cleanup() {
-	const folder = await exists(path);
-	if (folder) {
-		const files = await readdir('./tmp');
-
-		for (const file of files) {
-			await unlink(`./tmp/${file}`);
-		}
-
-		await rmdir('./tmp');
-	}
-}
+const path = `${process.cwd()}/FileWriterTest/`;
 
 describe('FileWriter', () => {
-	beforeAll(setup);
+	beforeAll(setup(path));
 
 	it('write a sitemap in chunks to the file system', async () => {
-		const fw = new FileWriter();
-		await fw.createSitemap(`${process.cwd()}/tmp/bla.xml`);
-		await fw.writeChunk({ loc: 'foo' });
-		await fw.writeChunk({ loc: 'bar' });
-		fw.commitSitemap();
+		const fw = new FileWriter({ path, fileName: 'bla' });
+
+		await fw.createSitemap();
+		await fw.writeChunk([ { loc: 'foo' } ]);
+		await fw.writeChunk([ { loc: 'bar' } ]);
+		await fw.commitSitemap();
+
+		await fw.createSitemap();
+		await fw.writeChunk([ { loc: 'baz' } ]);
+		await fw.writeChunk([ { loc: 'quux' } ]);
+		await fw.commitSitemap();
+
+		const files = await readdir(path);
+		expect(files.length).toBe(2);
 	});
 
-	afterAll(cleanup);
+	afterAll(cleanup(path));
 });
