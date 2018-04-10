@@ -1,5 +1,15 @@
 /* @flow */
 
+/*
+	TODO:
+	- copy old tests from master over, update them where needed
+	- extract useable code from here, refactor it, move to util?
+	- implement into persistence/appendToXml.js
+	- tests affected? Increase tests
+	- What about the newsSitemaps?
+	- Is the index sitemap logic there and tested?
+*/
+
 import xmlbuilder from 'xmlbuilder';
 
 import type { RawSiteMapData, RawNewsSiteMapData } from '../types/sitemap';
