@@ -46,23 +46,25 @@ export default class Main {
 	}
 
 	async run() {
+		// pass in options for paths @Sami
 		await this.createSitemap(`${process.cwd()}/tmp2/sitemap-0.xml`);
 
 		for (const fetcher of this.fetchers) {
 			for await (const data of fetcher.getData()) {
-				// Format data here
+				// Format data here @Bernd
 				await this.saveChunk(data);
 			}
 		}
 
 		await this.writer.commitSitemap();
 
-		// create index sitemap
+		// create index sitemap @Bernd
 	}
 
 	async saveChunk(data: RawSiteMapData[]) {
 		if (this.currentItemCount > this.options.maxItemsPerSitemap - 1) {
 			await this.writer.commitSitemap();
+			// pass in options for paths @Sami
 			await this.createSitemap(`${process.cwd()}/tmp2/sitemap-${this.sitemaps.length}.xml`);
 			this.currentItemCount = 0;
 		}
@@ -81,6 +83,7 @@ export default class Main {
 
 	async writeChunk(data: RawSiteMapData[]) {
 		await this.writer.writeChunk(data);
+		// calculate item count correctly @Sami
 		this.currentItemCount = this.currentItemCount + 1;
 	}
 }

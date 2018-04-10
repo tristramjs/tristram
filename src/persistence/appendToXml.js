@@ -15,7 +15,7 @@ async function* appendToXmlGenerator(cb: (data: string) => Promise<*>): AsyncGen
 		while (true) {
 			await promises.pop();
 			data = yield;
-			// data is array! Do not map!
+			// data is array! Do not map! @Bernd
 			builder.ele('node', data).up();
 		}
 	} finally {
