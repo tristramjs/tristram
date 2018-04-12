@@ -6,6 +6,7 @@ import Main from '../../src/main';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
 import RelayConnectionFetcher from '../../src/fetching/RelayConnection';
 import FileWriter from '../../src/persistence/FileWriter';
+import PlainFormatter from '../../src/formatting/Plain';
 
 const path = `${process.cwd()}/MainIntegrationTest/`;
 
@@ -41,8 +42,9 @@ describe('Main module', () => {
 		});
 
 		const main = new Main({
-			fetchers: [ syncFetcher, chunkFetcher ],
-			writer: new FileWriter({ path: `${process.cwd()}/tmp/`, fileName: 'sitemap' }),
+			fetchers: [ syncFetcher/*, chunkFetcher */ ],
+			formatter: new PlainFormatter(),
+			writer: new FileWriter({ path, fileName: 'sitemap' }),
 			options,
 		});
 

@@ -1,23 +1,23 @@
 /* @flow */
 import type { OptionsWithDefaults } from '../main';
-import type { RawSiteMapData } from '../types/sitemap';
+import type { RawSiteMapData, MappedSiteMapData } from '../types/sitemap';
 
-import { siteMapDataMapper } from './helper';
+import { siteMapDataMapper } from './format';
 
 import type { Formatter, Props } from './index';
 
 export default class PlainFormatter implements Formatter {
-	options: OptionsWithDefaults;
+	/*options: OptionsWithDefaults;
 
 	constructor({ options }: Props) {
 		this.options = options;
 	}
-
-	format(data: RawSiteMapData[]): string[] {
+*/
+	format(data: RawSiteMapData[]): MappedSiteMapData[] {
 		// bring data into right format
 		// $FlowFixMe
 		return data.map(item => siteMapDataMapper(item));
-
+		// return '<el>Hallo</el>';
 		// // check how many sitemaps to return
 		// if (data.length < this.options.maxItemsPerSitemap) {
 		// 	// $FlowFixMe

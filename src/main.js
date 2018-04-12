@@ -12,6 +12,8 @@ export type Options = {
 
 type Props = {
 	fetchers: ChunkFetcher[],
+	// formatter types..
+	formatter: any,
 	options: Options,
 	writer: Writer,
 };
@@ -27,13 +29,17 @@ type Sitemap = string;
 
 export default class Main {
 	fetchers: ChunkFetcher[];
+	formatter: any;
 	options: OptionsWithDefaults;
 	writer: Writer;
 	sitemaps: Sitemap[];
 	currentItemCount: number;
 
-	constructor({ fetchers, options, writer }: Props) {
+	constructor({
+		fetchers, formatter, options, writer,
+	}: Props) {
 		this.fetchers = fetchers;
+		this.formatter = formatter;
 		this.writer = writer;
 		this.sitemaps = [];
 		this.currentItemCount = 0;
@@ -49,8 +55,9 @@ export default class Main {
 
 		for (const fetcher of this.fetchers) {
 			for await (const data of fetcher.getData()) {
-				// Format data here @Bernd
-				await this.saveChunk(data);
+				// Format data here @Bernd, to fix tests
+
+				await this.saveChunk(this.formatter.format(data));
 			}
 		}
 
