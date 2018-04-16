@@ -1,6 +1,5 @@
 /* @flow */
 import { appendFile, writeFile } from '../util/fs';
-import type { RawSiteMapData } from '../types/sitemap';
 
 import appendToXml from './appendToXml';
 
@@ -15,7 +14,7 @@ export default class FileWriter implements Writer {
 	path: string;
 	fileName: string;
 	sitemaps: number;
-	sitemap: AsyncGenerator<void, void, RawSiteMapData[]>;
+	sitemap: AsyncGenerator<void, void, string>;
 
 	constructor({ path, fileName }: Props) {
 		this.path = path;
@@ -32,7 +31,7 @@ export default class FileWriter implements Writer {
 		return path;
 	}
 
-	async writeChunk(data: RawSiteMapData[]) {
+	async writeChunk(data: string) {
 		if (this.sitemap) {
 			await this.sitemap.next(data);
 		} else {
