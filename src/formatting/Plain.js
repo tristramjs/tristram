@@ -1,4 +1,6 @@
 /* @flow */
+import xmlbuilder from 'xmlbuilder';
+
 import type { OptionsWithDefaults } from '../main';
 import type { RawSiteMapData, MappedSiteMapData } from '../types/sitemap';
 
@@ -16,7 +18,8 @@ export default class PlainFormatter implements Formatter {
 	format(data: RawSiteMapData[]): MappedSiteMapData[] {
 		// bring data into right format
 		// $FlowFixMe
-		return data.map(item => siteMapDataMapper(item));
+		const mappedData = data.map(item => siteMapDataMapper(item));
+		return xmlbuilder.begin().ele(mappedData).end();
 		// return '<el>Hallo</el>';
 		// // check how many sitemaps to return
 		// if (data.length < this.options.maxItemsPerSitemap) {

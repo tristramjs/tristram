@@ -42,7 +42,7 @@ describe('Main module', () => {
 		});
 
 		const main = new Main({
-			fetchers: [ syncFetcher/*, chunkFetcher */ ],
+			fetchers: [ syncFetcher, chunkFetcher ],
 			formatter: new PlainFormatter(),
 			writer: new FileWriter({ path, fileName: 'sitemap' }),
 			options,

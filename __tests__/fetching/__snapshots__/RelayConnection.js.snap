@@ -3,7 +3,7 @@
 exports[`fetching.gqlConnection should fetch the whole connection in chunks 1`] = `
 Array [
   Object {
-    "loc": "bla",
+    "loc": "one",
   },
 ]
 `;
@@ -11,7 +11,23 @@ Array [
 exports[`fetching.gqlConnection should fetch the whole connection in chunks 2`] = `
 Array [
   Object {
-    "loc": "blerb",
+    "loc": "two",
+  },
+]
+`;
+
+exports[`fetching.gqlConnection should fetch the whole connection in chunks 3`] = `
+Array [
+  Object {
+    "loc": "three",
+  },
+]
+`;
+
+exports[`fetching.gqlConnection should fetch the whole connection in chunks 4`] = `
+Array [
+  Object {
+    "loc": "four",
   },
 ]
 `;

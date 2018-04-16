@@ -25,7 +25,6 @@ export default class HttpFetcher<T> implements Fetcher {
 		const res = await fetch(this.url, this.fetchOptions);
 		const data = await res.json();
 		const sitemapData = this.transformResult(data);
-
 		return [ sitemapData ];
 	}
 }

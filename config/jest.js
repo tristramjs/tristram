@@ -15,7 +15,7 @@ fetchMock.post(
 					pageInfo: {
 						hasNext: true,
 					},
-					edges: [ { node: { id: 'bla' }, cursor: 'test' } ],
+					edges: [ { node: { id: 'one' }, cursor: 'two' } ],
 				},
 			},
 		},
@@ -25,7 +25,45 @@ fetchMock.post(
 fetchMock.post(
 	(url, opts) => {
 		const body = JSON.parse(opts.body);
-		return url === 'http://test.com/graphql' && body.variables.after === 'test';
+		return url === 'http://test.com/graphql' && body.variables.after == 'two';
+	},
+	{
+		data: {
+			viewer: {
+				allTestItems: {
+					pageInfo: {
+						hasNext: true,
+					},
+					edges: [ { node: { id: 'two' }, cursor: 'three' } ],
+				},
+			},
+		},
+	}
+);
+
+fetchMock.post(
+	(url, opts) => {
+		const body = JSON.parse(opts.body);
+		return url === 'http://test.com/graphql' && body.variables.after == 'three';
+	},
+	{
+		data: {
+			viewer: {
+				allTestItems: {
+					pageInfo: {
+						hasNext: true,
+					},
+					edges: [ { node: { id: 'three' }, cursor: 'four' } ],
+				},
+			},
+		},
+	}
+);
+
+fetchMock.post(
+	(url, opts) => {
+		const body = JSON.parse(opts.body);
+		return url === 'http://test.com/graphql' && body.variables.after === 'four';
 	},
 	{
 		data: {
@@ -34,7 +72,7 @@ fetchMock.post(
 					pageInfo: {
 						hasNext: false,
 					},
-					edges: [ { node: { id: 'blerb' }, cursor: 'bar' } ],
+					edges: [ { node: { id: 'four' }, cursor: 'bar' } ],
 				},
 			},
 		},

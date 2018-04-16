@@ -55,9 +55,7 @@ export default class Main {
 
 		for (const fetcher of this.fetchers) {
 			for await (const data of fetcher.getData()) {
-				// Format data here @Bernd, to fix tests
-
-				await this.saveChunk(this.formatter.format(data));
+				await this.saveChunk(data);
 			}
 		}
 
@@ -67,6 +65,9 @@ export default class Main {
 	}
 
 	async saveChunk(data: RawSiteMapData[]) {
+		// problem / bug when chunk from fetchers.getData() is bigger than
+		// options.maxItemsPerSitemap! The if-statement below does not cover that!
+		// Especially relevant for SyncFetcher
 		if (this.currentItemCount > this.options.maxItemsPerSitemap - 1) {
 			await this.writer.commitSitemap();
 			await this.createSitemap();
@@ -86,7 +87,9 @@ export default class Main {
 	}
 
 	async writeChunk(data: RawSiteMapData[]) {
-		await this.writer.writeChunk(data);
+		const formatted = this.formatter.format(data);
+		await this.writer.writeChunk(formatted);
+
 		this.currentItemCount = this.currentItemCount + data.length;
 	}
 }
