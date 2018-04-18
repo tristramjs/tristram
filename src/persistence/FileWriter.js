@@ -47,7 +47,15 @@ export default class FileWriter implements Writer {
 		}
 	}
 
+	async createIndexSitemap(data: string) {
+		await writeFile(`${this.path}indexSitemap.xml`, data);
+	}
+
 	getSitemapPath() {
 		return `${this.path}${this.fileName}-${this.sitemaps}.xml`;
+	}
+
+	getPath() {
+		return this.path;
 	}
 }

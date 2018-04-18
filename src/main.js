@@ -3,11 +3,14 @@ import type { ChunkFetcher } from './fetching';
 import type { Writer } from './persistence/index';
 import type { RawSiteMapData } from './types/sitemap';
 
+
+// options management? We have several Modules who needs to know about options
 export type Options = {
 	hostname: string,
 	path?: string,
 	cacheTime?: number,
 	maxItemsPerSitemap?: number,
+	maxItemsPerIndexSitemap?: number,
 };
 
 type Props = {
@@ -22,7 +25,8 @@ export type OptionsWithDefaults = {
 	hostname: string,
 	cacheTime?: number,
 	maxItemsPerSitemap: number,
-	path: string,
+	maxItemsPerIndexSitemap?: number,
+	path?: string,
 };
 
 type Sitemap = string;
@@ -46,6 +50,7 @@ export default class Main {
 
 		this.options = {
 			maxItemsPerSitemap: 50000,
+			maxItemsPerIndexSitemap: 50000,
 			...options,
 		};
 	}
@@ -61,7 +66,7 @@ export default class Main {
 
 		await this.writer.commitSitemap();
 
-		// create index sitemap @Bernd
+		await this.createIndexSitemap();
 	}
 
 	async saveChunk(data: RawSiteMapData[]) {
@@ -81,8 +86,10 @@ export default class Main {
 			const path = await this.writer.createSitemap();
 			this.sitemaps.push(path);
 		} catch (err) {
+			/* eslint-disable no-console */
 			console.error('Could not create sitemap!');
 			console.error(err);
+			/* eslint-enable no-console */
 		}
 	}
 
@@ -91,5 +98,24 @@ export default class Main {
 		await this.writer.writeChunk(formatted);
 
 		this.currentItemCount = this.currentItemCount + data.length;
+	}
+
+	async createIndexSitemap() {
+		const numberIndexSitemaps = Math.ceil(this.sitemaps.length / this.options.maxItemsPerIndexSitemap);
+		for (let index = 0; index < numberIndexSitemaps; index = index + 1) {
+			try {
+				// writer path is wrong!?
+				const path = this.options.path || this.writer.getPath();
+				const { hostname } = this.options;
+				const numberSitemaps = this.sitemaps.length;
+				const indexSitemap = this.formatter.formatIndex({ path, hostname, numberSitemaps });
+				await this.writer.createIndexSitemap(indexSitemap);
+			} catch (err) {
+				/* eslint-disable no-console */
+				console.error('Could not create index sitemaps!');
+				console.error(err);
+				/* eslint-enable no-console */
+			}
+		}
 	}
 }

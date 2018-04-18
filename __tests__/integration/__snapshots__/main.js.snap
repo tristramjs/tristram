@@ -5,3 +5,5 @@ exports[`Main module should run without errors 1`] = `"<foo><node loc=\\"quz\\"/
 exports[`Main module should run without errors 2`] = `"<foo><node loc=\\"qak\\"/><node loc=\\"bla\\"/></foo>"`;
 
 exports[`Main module should run without errors 3`] = `"<foo><node loc=\\"blerb\\"/></foo>"`;
+
+exports[`Main module should run without errors 4`] = `"<?xml version=\\"1.0\\"?><urlset xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\" xmlns:image=\\"http://www.google.com/schemas/sitemap-image/1.1\\" xmlns:video=\\"http://www.google.com/schemas/sitemap-video/1.1\\"><loc>three</loc><loc>four</loc></urlset>"`;
