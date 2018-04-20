@@ -1,13 +1,14 @@
 /* @flow */
 
-import type { RawSiteMapData } from '../types/sitemap';
-import type { OptionsWithDefaults } from '../main';
-
-import NewsSiteMapFormatter from './NewsSiteMap';
+import type { RawSiteMapData, RawNewsSiteMapData } from '../types/sitemap';
 
 export interface Formatter {
 	format(data: RawSiteMapData[]): string;
 	formatIndex(data: any): string;
 }
 
-export default { NewsSiteMapFormatter };
+export interface NewsSiteFormatter {
+	format(data: RawSiteMapData[]): string;
+	formatNews(data: RawNewsSiteMapData[]): string;
+	formatIndex(data: any): string;
+}
