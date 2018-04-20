@@ -38,7 +38,27 @@ describe('Main module', () => {
 				}
 			}`,
 			getConnection: conn => conn.data.viewer.allTestItems,
-			transformResult: ({ id }) => ({ loc: id }),
+			transformResult: (data) => {
+				const returnData = { ...data };
+				returnData.loc = data.id;
+				delete returnData.id;
+				if (data.lastmod) {
+					returnData.lastmod = new Date(data.lastmod);
+				}
+				if (data.video) {
+					returnData.video = data.video.map((item) => {
+						const returnItem = { ...item };
+						if (item.expiration_date) {
+							returnItem.expiration_date = new Date(item.expiration_date);
+						}
+						if (item.publication_date) {
+							returnItem.publication_date = new Date(item.publication_date);
+						}
+						return returnItem;
+					});
+				}
+				return returnData;
+			},
 		});
 
 		const main = new Main({
@@ -55,7 +75,7 @@ describe('Main module', () => {
 			expect(await readfile(`${path}/${file}`, 'utf8')).toMatchSnapshot();
 		}
 
-		expect(files.length).toBe(3);
+		expect(files.length).toBe(4);
 	});
 
 	afterAll(cleanup(path));

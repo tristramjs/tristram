@@ -138,5 +138,5 @@ export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 		delete updated.video;
 	}
 	// $FlowFixMe
-	return updated;
+	return { url: updated };
 }
