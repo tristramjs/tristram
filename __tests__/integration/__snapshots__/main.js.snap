@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Main / Integration Tests GraphQL fetcher should fetch and transform data into a valid sitemap 1`] = `
-Array [
-  "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><urlset xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\" xmlns:image=\\"http://www.google.com/schemas/sitemap-image/1.1\\" xmlns:video=\\"http://www.google.com/schemas/sitemap-video/1.1\\"><url><loc>1</loc></url><url><loc>2</loc></url><url><loc>3</loc></url><url><loc>4</loc></url></urlset>",
-]
-`;
+exports[`Main module should run without errors 1`] = `"<foo><node loc=\\"quz\\"/><node loc=\\"qaz\\"/></foo>"`;
 
-exports[`Main / Integration Tests Restful fetching should fetch and transform data into a valid sitemap 1`] = `
-Array [
-  "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?><urlset xmlns=\\"http://www.sitemaps.org/schemas/sitemap/0.9\\" xmlns:image=\\"http://www.google.com/schemas/sitemap-image/1.1\\" xmlns:video=\\"http://www.google.com/schemas/sitemap-video/1.1\\"><url><loc>https://api.github.com/users/octocat</loc><lastmod>2011-01-25T18:44:36.000Z</lastmod></url></urlset>",
-]
-`;
+exports[`Main module should run without errors 2`] = `"<foo><node loc=\\"qak\\"/><node loc=\\"bla\\"/></foo>"`;
+
+exports[`Main module should run without errors 3`] = `"<foo><node loc=\\"blerb\\"/></foo>"`;
