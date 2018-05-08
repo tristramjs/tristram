@@ -12,13 +12,13 @@ describe('FileWriter', () => {
 		const fw = new FileWriter({ path, fileName: 'bla' });
 
 		await fw.createSitemap();
-		await fw.writeChunk([ { loc: 'foo' } ]);
-		await fw.writeChunk([ { loc: 'bar' } ]);
+		await fw.writeChunk("[ { loc: 'foo' } ]");
+		await fw.writeChunk("[ { loc: 'bar' } ]");
 		await fw.commitSitemap();
 
 		await fw.createSitemap();
-		await fw.writeChunk([ { loc: 'baz' } ]);
-		await fw.writeChunk([ { loc: 'quux' } ]);
+		await fw.writeChunk("[ { loc: 'baz' } ]");
+		await fw.writeChunk("[ { loc: 'quux' } ]");
 		await fw.commitSitemap();
 
 		const files = await readdir(path);

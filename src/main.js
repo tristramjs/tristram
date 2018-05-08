@@ -3,7 +3,6 @@ import type { ChunkFetcher } from './fetching';
 import type { Writer } from './persistence/index';
 import type { RawSiteMapData } from './types/sitemap';
 
-
 // options management? We have several Modules who needs to know about options
 export type Options = {
 	hostname: string,
@@ -64,7 +63,7 @@ export default class Main {
 			}
 		}
 
-		await this.writer.commitSitemap();
+		await this.writer.commitSitemap(this.formatter.closingTag);
 
 		await this.createIndexSitemap();
 	}
@@ -74,7 +73,7 @@ export default class Main {
 		// options.maxItemsPerSitemap! The if-statement below does not cover that!
 		// Especially relevant for SyncFetcher
 		if (this.currentItemCount > this.options.maxItemsPerSitemap - 1) {
-			await this.writer.commitSitemap();
+			await this.writer.commitSitemap(this.formatter.closingTag);
 			await this.createSitemap();
 			this.currentItemCount = 0;
 		}
@@ -83,7 +82,8 @@ export default class Main {
 
 	async createSitemap() {
 		try {
-			const path = await this.writer.createSitemap();
+			const { xmlDeclaration, openingTag } = this.formatter;
+			const path = await this.writer.createSitemap(xmlDeclaration, openingTag);
 			this.sitemaps.push(path);
 		} catch (err) {
 			/* eslint-disable no-console */
