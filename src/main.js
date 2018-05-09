@@ -24,7 +24,7 @@ export type OptionsWithDefaults = {
 	hostname: string,
 	cacheTime?: number,
 	maxItemsPerSitemap: number,
-	maxItemsPerIndexSitemap?: number,
+	maxItemsPerIndexSitemap: number,
 	path?: string,
 };
 

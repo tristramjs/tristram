@@ -11,5 +11,7 @@ export interface Formatter {
 }
 
 export interface NewsSiteFormatter extends Formatter {
+	openingTagNews: string;
+	closingTagNews: string;
 	formatNews(data: RawNewsSiteMapData[]): string;
 }
