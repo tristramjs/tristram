@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formatIndex formatIndexSitemap 1`] = `
+Object {
+  "sitemapindex": Object {
+    "@xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9",
+    "sitemap": Array [
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-10.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-9.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-8.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-7.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-6.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-5.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-4.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-3.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-2.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-1.xml",
+      },
+    ],
+  },
+}
+`;

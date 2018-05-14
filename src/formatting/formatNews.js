@@ -29,18 +29,3 @@ export default function newsSiteMapDataMapper(item: RawNewsSiteMapData): MappedN
 
 	return updated;
 }
-
-/*
-
-export function createNewsSitemap(data: MappedNewsSiteMapData[]): string {
-	const xmlObj = {
-		urlset: {
-			'@xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
-			'@xmlns:news': 'http://www.google.com/schemas/sitemap-news/0.9',
-			url: data,
-		},
-	};
-	const xml = createXML(xmlObj);
-	return xml;
-}
-*/
