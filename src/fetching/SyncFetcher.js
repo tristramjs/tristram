@@ -1,9 +1,9 @@
 /* @flow */
 import type { RawSiteMapData } from '../types/sitemap';
 
-import type { ChunkFetcher } from './index';
+import type { Fetcher } from './index';
 
-export default class SyncFetcher implements ChunkFetcher {
+export default class SyncFetcher implements Fetcher {
 	data: RawSiteMapData | RawSiteMapData[];
 
 	constructor({ data }: { data: RawSiteMapData | RawSiteMapData[] }) {

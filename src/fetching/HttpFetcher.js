@@ -1,6 +1,8 @@
 /* @flow */
 import type { RawSiteMapData } from '../types/sitemap';
 
+import SyncFetcher from './SyncFetcher';
+
 import type { Fetcher, FetcherProps } from './index';
 
 require('es6-promise').polyfill();
@@ -21,10 +23,11 @@ export default class HttpFetcher<T> implements Fetcher {
 		this.fetchOptions = props.fetchOptions;
 	}
 
-	async getData(): Promise<RawSiteMapData[]> {
+	async* getData(): AsyncIterator<RawSiteMapData[]> {
 		const res = await fetch(this.url, this.fetchOptions);
-		const data = await res.json();
-		const sitemapData = this.transformResult(data);
-		return [ sitemapData ];
+		const rawData = await res.json();
+		const data = this.transformResult(rawData);
+
+		yield* new SyncFetcher({ data }).getData();
 	}
 }

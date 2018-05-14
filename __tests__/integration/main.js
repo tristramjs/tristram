@@ -4,7 +4,7 @@ import { setup, cleanup } from '../__testHelpers__/fs';
 import { readdir, readfile } from '../../src/util/fs';
 import Main from '../../src/main';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
-import RelayConnectionFetcher from '../../src/fetching/RelayConnection';
+import RelayConnectionFetcher from '../../src/fetching/RelayConnectionFetcher';
 import FileWriter from '../../src/persistence/FileWriter';
 import PlainFormatter from '../../src/formatting/Plain';
 

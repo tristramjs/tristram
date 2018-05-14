@@ -1,5 +1,5 @@
 /* @flow */
-import RelayConnectionFetcher from '../../src/fetching/RelayConnection';
+import RelayConnectionFetcher from '../../src/fetching/RelayConnectionFetcher';
 
 describe('fetching.gqlConnection', () => {
 	it('should fetch the whole connection in chunks', async () => {

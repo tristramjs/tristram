@@ -1,15 +1,15 @@
 /* @flow */
 import { appendFile, writeFile } from '../util/fs';
 
-import type { Writer } from './index';
+import type { Writer, Path } from './index';
 
 type Props = {
-	path: string,
+	path: Path,
 	fileName: string,
 };
 
 export default class FileWriter implements Writer {
-	path: string;
+	path: Path;
 	fileName: string;
 	sitemaps: number;
 
@@ -19,7 +19,7 @@ export default class FileWriter implements Writer {
 		this.sitemaps = 0;
 	}
 
-	async createSitemap(xmlDeclaration: string, openingUrlSet: string): Promise<string> {
+	async createSitemap(xmlDeclaration: string, openingUrlSet: string): Promise<Path> {
 		const path = this.getSitemapPath();
 		await writeFile(path, xmlDeclaration + openingUrlSet);
 

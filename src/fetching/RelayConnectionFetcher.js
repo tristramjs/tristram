@@ -1,9 +1,7 @@
 /* @flow */
 import type { RawSiteMapData } from '../types/sitemap';
 
-import GqlFetcher from './gql';
-
-import type { ChunkFetcher, FetcherProps } from './index';
+import type { Fetcher, FetcherProps } from './index';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -14,11 +12,10 @@ type Props<T> = FetcherProps<T> & {
 	query: string,
 };
 
-type GetConnection<T> = <T>(x: Object) => GqlConnection<T>;
-type GqlConnection<T> = { edges: { node: T, cursor: string }[], pageInfo: { hasNext: boolean } };
+type GetConnection<T> = <T>(x: Object) => GraphQlConnection<T>;
+type GraphQlConnection<T> = { edges: { node: T, cursor: string }[], pageInfo: { hasNext: boolean } };
 
-export default class RelayConnection<T> implements ChunkFetcher {
-	gqlFetcher: typeof GqlFetcher;
+export default class RelayConnection<T> implements Fetcher {
 	url: string;
 	query: string;
 	chunkSize: number;
@@ -46,7 +43,7 @@ export default class RelayConnection<T> implements ChunkFetcher {
 
 		do {
 			try {
-				const data: GqlConnection<T> = await this.fetchConnection();
+				const data: GraphQlConnection<T> = await this.fetchConnection();
 
 				yield data.edges.map(edge => this.transformResult(edge.node));
 				({ hasNext } = data.pageInfo);
@@ -64,7 +61,7 @@ export default class RelayConnection<T> implements ChunkFetcher {
 		} while (hasNext);
 	}
 
-	async fetchConnection(): Promise<GqlConnection<T>> {
+	async fetchConnection(): Promise<GraphQlConnection<T>> {
 		const {
 			url, query, variables, getConnection,
 		} = this;

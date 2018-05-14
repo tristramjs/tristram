@@ -1,7 +1,7 @@
 /* @flow */
 import type { RawSiteMapData } from '../types/sitemap';
 
-import HttpFetcher from './http';
+import HttpFetcher from './HttpFetcher';
 
 import type { Fetcher, FetcherProps } from './index';
 
@@ -27,7 +27,7 @@ export default class GraphqlFetcher<T> implements Fetcher {
 		this.httpFetcher = new HttpFetcher({ url, transformResult, fetchOptions });
 	}
 
-	async getData() {
-		return this.httpFetcher.getData();
+	async* getData(): AsyncIterator<RawSiteMapData[]> {
+		yield* this.httpFetcher.getData();
 	}
 }

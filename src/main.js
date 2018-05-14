@@ -1,5 +1,5 @@
 /* @flow */
-import type { ChunkFetcher } from './fetching';
+import type { Fetcher } from './fetching';
 import type { Writer } from './persistence/index';
 import type { RawSiteMapData } from './types/sitemap';
 
@@ -13,7 +13,7 @@ export type Options = {
 };
 
 type Props = {
-	fetchers: ChunkFetcher[],
+	fetchers: Fetcher[],
 	// formatter types..
 	formatter: any,
 	options: Options,
@@ -24,14 +24,14 @@ export type OptionsWithDefaults = {
 	hostname: string,
 	cacheTime?: number,
 	maxItemsPerSitemap: number,
-	maxItemsPerIndexSitemap?: number,
+	maxItemsPerIndexSitemap: number,
 	path?: string,
 };
 
 type Sitemap = string;
 
 export default class Main {
-	fetchers: ChunkFetcher[];
+	fetchers: Fetcher[];
 	formatter: any;
 	options: OptionsWithDefaults;
 	writer: Writer;

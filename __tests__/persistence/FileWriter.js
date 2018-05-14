@@ -11,15 +11,15 @@ describe('FileWriter', () => {
 	it('write a sitemap in chunks to the file system', async () => {
 		const fw = new FileWriter({ path, fileName: 'bla' });
 
-		await fw.createSitemap();
+		await fw.createSitemap('<?xml version="1.0"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 		await fw.writeChunk("[ { loc: 'foo' } ]");
 		await fw.writeChunk("[ { loc: 'bar' } ]");
-		await fw.commitSitemap();
+		await fw.commitSitemap('</urlset>');
 
-		await fw.createSitemap();
+		await fw.createSitemap('<?xml version="1.0"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 		await fw.writeChunk("[ { loc: 'baz' } ]");
 		await fw.writeChunk("[ { loc: 'quux' } ]");
-		await fw.commitSitemap();
+		await fw.commitSitemap('</urlset>');
 
 		const files = await readdir(path);
 		expect(files.length).toBe(2);

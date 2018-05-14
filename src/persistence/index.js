@@ -1,10 +1,12 @@
 /* @flow */
 
+export type Path = string;
+
 export interface Writer {
-	createSitemap(xmlDeclaration: string, openingTag: string): Promise<string>;
+	createSitemap(xmlDeclaration: string, openingTag: string): Promise<Path>;
 	writeChunk(data: string): Promise<void>;
 	commitSitemap(closingTag: string): Promise<void>;
 	createIndexSitemap(data: string): Promise<void>;
-	getPath(): string;
-	getSitemapPath(): string;
+	getPath(): Path;
+	getSitemapPath(): Path;
 }
