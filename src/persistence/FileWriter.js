@@ -11,39 +11,32 @@ type Props = {
 export default class FileWriter implements Writer {
 	path: Path;
 	fileName: string;
-	sitemaps: number;
 
 	constructor({ path, fileName }: Props) {
 		this.path = path;
 		this.fileName = fileName;
-		this.sitemaps = 0;
 	}
 
-	async createSitemap(xmlDeclaration: string, openingUrlSet: string): Promise<Path> {
-		const path = this.getSitemapPath();
+	async createSitemap(xmlDeclaration: string, openingUrlSet: string, partNumber: number): Promise<Path> {
+		const path = this.getSitemapPath(partNumber);
 		await writeFile(path, xmlDeclaration + openingUrlSet);
 
 		return path;
 	}
 
-	async writeChunk(data: string) {
-		await appendFile(this.getSitemapPath(), data);
+	async writeChunk(data: string, partNumber: number) {
+		await appendFile(this.getSitemapPath(partNumber), data);
 	}
 
-	async commitSitemap(closingUrlSet: string) {
-		await appendFile(this.getSitemapPath(), closingUrlSet);
-		this.sitemaps = this.sitemaps + 1;
+	async commitSitemap(closingUrlSet: string, partNumber: number) {
+		await appendFile(this.getSitemapPath(partNumber), closingUrlSet);
 	}
 
 	async createIndexSitemap(data: string) {
 		await writeFile(`${this.path}indexSitemap.xml`, data);
 	}
 
-	getSitemapPath() {
-		return `${this.path}${this.fileName}-${this.sitemaps}.xml`;
-	}
-
-	getPath() {
-		return this.path;
+	getSitemapPath(partNumber: number) {
+		return `${this.path}${this.fileName}-${partNumber}.xml`;
 	}
 }

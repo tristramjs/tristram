@@ -2,7 +2,7 @@
 
 import { setup, cleanup } from '../__testHelpers__/fs';
 import { readdir, readfile } from '../../src/util/fs';
-import Main from '../../src/main';
+import SitemapGenerator from '../../src/generation/SitemapGenerator';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
 import RelayConnectionFetcher from '../../src/fetching/RelayConnectionFetcher';
 import FileWriter from '../../src/persistence/FileWriter';
@@ -10,11 +10,11 @@ import PlainFormatter from '../../src/formatting/Plain';
 
 const path = `${process.cwd()}/MainIntegrationTest/`;
 
-describe('Main module', () => {
+describe('SitemapGenerator module', () => {
 	beforeAll(setup(path));
 
 	it('should run without errors', async () => {
-		const options = { hostname: 'http://foo.bar', maxItemsPerSitemap: 2 };
+		const options = { hostname: 'foo.bar', maxItemsPerSitemap: 2 };
 
 		const syncFetcher = new SyncFetcher({
 			data: [ { loc: 'quz' }, { loc: 'qaz' }, { loc: 'qak' } ],
@@ -61,7 +61,7 @@ describe('Main module', () => {
 			},
 		});
 
-		const main = new Main({
+		const main = new SitemapGenerator({
 			fetchers: [ syncFetcher, chunkFetcher ],
 			formatter: new PlainFormatter(),
 			writer: new FileWriter({ path, fileName: 'sitemap' }),
@@ -75,7 +75,7 @@ describe('Main module', () => {
 			expect(await readfile(`${path}/${file}`, 'utf8')).toMatchSnapshot();
 		}
 
-		expect(files.length).toBe(4);
+		expect(files.length).toBe(5);
 	});
 
 	afterAll(cleanup(path));

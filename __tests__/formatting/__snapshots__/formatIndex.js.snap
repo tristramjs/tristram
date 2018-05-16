@@ -6,9 +6,6 @@ Object {
     "@xmlns": "http://www.sitemaps.org/schemas/sitemap/0.9",
     "sitemap": Array [
       Object {
-        "loc": "https://computer.me/here/sitemap/sitemap-10.xml",
-      },
-      Object {
         "loc": "https://computer.me/here/sitemap/sitemap-9.xml",
       },
       Object {
@@ -34,6 +31,9 @@ Object {
       },
       Object {
         "loc": "https://computer.me/here/sitemap/sitemap-1.xml",
+      },
+      Object {
+        "loc": "https://computer.me/here/sitemap/sitemap-0.xml",
       },
     ],
   },

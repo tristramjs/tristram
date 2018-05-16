@@ -11,15 +11,15 @@ describe('FileWriter', () => {
 	it('write a sitemap in chunks to the file system', async () => {
 		const fw = new FileWriter({ path, fileName: 'bla' });
 
-		await fw.createSitemap('<?xml version="1.0"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
-		await fw.writeChunk("[ { loc: 'foo' } ]");
-		await fw.writeChunk("[ { loc: 'bar' } ]");
-		await fw.commitSitemap('</urlset>');
+		await fw.createSitemap('<?xml version="1.0"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', 0);
+		await fw.writeChunk("[ { loc: 'foo' } ]", 0);
+		await fw.writeChunk("[ { loc: 'bar' } ]", 0);
+		await fw.commitSitemap('</urlset>', 0);
 
-		await fw.createSitemap('<?xml version="1.0"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
-		await fw.writeChunk("[ { loc: 'baz' } ]");
-		await fw.writeChunk("[ { loc: 'quux' } ]");
-		await fw.commitSitemap('</urlset>');
+		await fw.createSitemap('<?xml version="1.0"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', 1);
+		await fw.writeChunk("[ { loc: 'baz' } ]", 1);
+		await fw.writeChunk("[ { loc: 'quux' } ]", 1);
+		await fw.commitSitemap('</urlset>', 1);
 
 		const files = await readdir(path);
 		expect(files.length).toBe(2);

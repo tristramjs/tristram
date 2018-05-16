@@ -4,7 +4,7 @@ export default function createIndexSitemap(numberSitemaps: number, hostname: str
 	const indexItems = [];
 	for (let iterator = numberSitemaps; iterator > 0; iterator = iterator - 1) {
 		const sitemap = {
-			loc: `https://${hostname}/${path}/sitemap-${iterator}.xml`,
+			loc: `https://${hostname}${path}/sitemap-${iterator - 1}.xml`,
 		};
 		indexItems.push(sitemap);
 	}

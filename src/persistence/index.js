@@ -3,10 +3,9 @@
 export type Path = string;
 
 export interface Writer {
-	createSitemap(xmlDeclaration: string, openingTag: string): Promise<Path>;
-	writeChunk(data: string): Promise<void>;
-	commitSitemap(closingTag: string): Promise<void>;
+	createSitemap(xmlDeclaration: string, openingTag: string, partNumber: number): Promise<Path>;
+	writeChunk(data: string, partNumber: number): Promise<void>;
+	commitSitemap(closingTag: string, partNumber: number): Promise<void>;
 	createIndexSitemap(data: string): Promise<void>;
-	getPath(): Path;
-	getSitemapPath(): Path;
+	getSitemapPath(partNumber: number): Path;
 }
