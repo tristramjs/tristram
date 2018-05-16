@@ -123,7 +123,6 @@ export function mapVideo(video: Object | Array<*>) {
 	return null;
 }
 
-
 export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	const updated = { ...item };
 	if (item.lastmod) {

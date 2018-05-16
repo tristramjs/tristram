@@ -65,7 +65,7 @@ export default class SitemapGenerator {
 		}
 
 		if (this.buffer.length > 0) {
-			this.commitCompleteSitemap(this.buffer);
+			await this.commitCompleteSitemap(this.buffer);
 			this.buffer = [];
 		}
 
