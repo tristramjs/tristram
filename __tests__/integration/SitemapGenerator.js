@@ -5,7 +5,7 @@ import { readdir, readfile } from '../../src/util/fs';
 import SitemapGenerator from '../../src/generation/SitemapGenerator';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
 import RelayConnectionFetcher from '../../src/fetching/RelayConnectionFetcher';
-import FileWriter from '../../src/persistence/FileWriter';
+import FileWriter from '../../src/writing/FileWriter';
 import PlainFormatter from '../../src/formatting/Plain';
 
 const path = `${process.cwd()}/MainIntegrationTest/`;

@@ -63,4 +63,4 @@ tmp
 
 minio
 
-dist
+__tests__

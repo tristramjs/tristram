@@ -1,7 +1,7 @@
 /* @flow */
 import { setup, cleanup } from '../__testHelpers__/fs';
 import { readdir } from '../../src/util/fs';
-import FileWriter from '../../src/persistence/FileWriter';
+import FileWriter from '../../src/writing/FileWriter';
 
 const path = `${process.cwd()}/FileWriterTest/`;
 

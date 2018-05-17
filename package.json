@@ -5,13 +5,17 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest",
-		"test-update": "jest -u"
+		"test-update": "jest -u",
+		"build": "babel src --out-dir dist"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": ["sitemap", "seo"],
+	"keywords": [
+		"sitemap",
+		"seo"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -19,8 +23,10 @@
 	},
 	"homepage": "https://github.com/sambou/tristram#readme",
 	"devDependencies": {
+		"@babel/cli": "7.0.0-beta.44",
 		"@babel/core": "^7.0.0-beta.44",
 		"@babel/plugin-proposal-async-generator-functions": "^7.0.0-beta.44",
+		"@babel/plugin-proposal-export-namespace-from": "^7.0.0-beta.47",
 		"@babel/plugin-syntax-async-generators": "^7.0.0-beta.44",
 		"@babel/plugin-transform-flow-strip-types": "^7.0.0-beta.44",
 		"@babel/preset-env": "^7.0.0-beta.44",
@@ -46,7 +52,12 @@
 		"xmlbuilder": "9.0.7"
 	},
 	"jest": {
-		"setupFiles": ["./config/jest.js"],
-		"testPathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/__tests__/__testHelpers__/"]
+		"setupFiles": [
+			"./config/jest.js"
+		],
+		"testPathIgnorePatterns": [
+			"<rootDir>/node_modules/",
+			"<rootDir>/__tests__/__testHelpers__/"
+		]
 	}
 }

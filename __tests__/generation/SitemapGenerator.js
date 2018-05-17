@@ -2,7 +2,7 @@
 import SitemapGenerator from '../../src/generation/SitemapGenerator';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
 import PlainFormatter from '../../src/formatting/Plain';
-import InMemoryWriter from '../../src/persistence/InMemoryWriter';
+import InMemoryWriter from '../../src/writing/InMemoryWriter';
 
 const fooFetcher = new SyncFetcher({
 	data: [ { loc: 'foo' }, { loc: 'bar' }, { loc: 'qak' } ],
@@ -42,9 +42,9 @@ describe('SitemapGenerator module', () => {
 				options,
 			});
 
-			await main.run();
+			const sitemaps = await main.run();
 
-			expect(writer.sitemaps).toMatchSnapshot();
-			expect(writer.sitemaps.length).toBe(result);
+			expect(sitemaps).toMatchSnapshot();
+			expect(sitemaps.length).toBe(result);
 		}));
 });

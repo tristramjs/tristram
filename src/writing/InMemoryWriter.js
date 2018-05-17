@@ -7,6 +7,7 @@ export default class InMemoryWriter implements Writer {
 
 	async write(key: string, data: string) {
 		this.sitemaps.push(data);
-		return key;
+
+		return data;
 	}
 }

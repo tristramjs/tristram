@@ -1,6 +1,6 @@
 /* @flow */
 import type { Fetcher } from '../fetching';
-import type { Writer } from '../persistence';
+import type { Writer } from '../writing';
 import type { Formatter } from '../formatting';
 import type { RawSiteMapData } from '../types/sitemap';
 import chunk from '../util/chunk';
@@ -57,7 +57,7 @@ export default class SitemapGenerator {
 		};
 	}
 
-	async run() {
+	async run(): Promise<string[]> {
 		for (const fetcher of this.fetchers) {
 			for await (const data of fetcher.getData()) {
 				await this.saveChunk(data);
@@ -70,6 +70,8 @@ export default class SitemapGenerator {
 		}
 
 		await this.writeIndexSitemap();
+
+		return this.sitemaps;
 	}
 
 	async saveChunk(data: RawSiteMapData[]) {
@@ -124,7 +126,8 @@ export default class SitemapGenerator {
 		for (let index = 0; index < numberIndexSitemaps; index = index + 1) {
 			const indexSitemap = this.formatter.formatIndex({ path: this.publicPath, hostname, numberSitemaps });
 
-			await this.writer.write('index-sitemap.xml', indexSitemap);
+			const map = await this.writer.write('index-sitemap.xml', indexSitemap);
+			this.sitemaps.push(map);
 		}
 	}
 }
