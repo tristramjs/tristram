@@ -22,13 +22,13 @@ const qakFetcher = new SyncFetcher({
 
 describe('SitemapGenerator module', () => {
 	[
-		{ maxItemsPerSitemap: 2, fetchers: [ fooFetcher, barFetcher, bazFetcher ], result: 3 },
-		{ maxItemsPerSitemap: 2, fetchers: [ fooFetcher, bazFetcher ], result: 3 },
-		{ maxItemsPerSitemap: 2, fetchers: [ fooFetcher ], result: 2 },
-		{ maxItemsPerSitemap: 2, fetchers: [ barFetcher ], result: 1 },
-		{ maxItemsPerSitemap: 2, fetchers: [ bazFetcher ], result: 1 },
-		{ maxItemsPerSitemap: 2, fetchers: [ qakFetcher, bazFetcher ], result: 4 },
-		{ maxItemsPerSitemap: 1, fetchers: [ qakFetcher, bazFetcher ], result: 7 },
+		{ maxItemsPerSitemap: 2, fetchers: [ fooFetcher, barFetcher, bazFetcher ], result: 4 },
+		{ maxItemsPerSitemap: 2, fetchers: [ fooFetcher, bazFetcher ], result: 4 },
+		{ maxItemsPerSitemap: 2, fetchers: [ fooFetcher ], result: 3 },
+		{ maxItemsPerSitemap: 2, fetchers: [ barFetcher ], result: 2 },
+		{ maxItemsPerSitemap: 2, fetchers: [ bazFetcher ], result: 2 },
+		{ maxItemsPerSitemap: 2, fetchers: [ qakFetcher, bazFetcher ], result: 5 },
+		{ maxItemsPerSitemap: 1, fetchers: [ qakFetcher, bazFetcher ], result: 8 },
 	].map(({ maxItemsPerSitemap, fetchers, result }) =>
 		it('should run without errors', async () => {
 			const options = { hostname: 'foo.bar', maxItemsPerSitemap };

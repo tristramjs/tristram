@@ -64,7 +64,7 @@ describe('SitemapGenerator module', () => {
 		const main = new SitemapGenerator({
 			fetchers: [ syncFetcher, chunkFetcher ],
 			formatter: new PlainFormatter(),
-			writer: new FileWriter({ path, fileName: 'sitemap' }),
+			writer: new FileWriter({ path }),
 			options,
 		});
 

@@ -65,11 +65,11 @@ export default class SitemapGenerator {
 		}
 
 		if (this.buffer.length > 0) {
-			await this.commitCompleteSitemap(this.buffer);
+			await this.writeSitemap(this.buffer);
 			this.buffer = [];
 		}
 
-		await this.createIndexSitemap();
+		await this.writeIndexSitemap();
 	}
 
 	async saveChunk(data: RawSiteMapData[]) {
@@ -77,14 +77,14 @@ export default class SitemapGenerator {
 		if (this.buffer.length + data.length < maxItemsPerSitemap) {
 			this.buffer = this.buffer.concat(data);
 		} else if (this.buffer.length + data.length === maxItemsPerSitemap) {
-			await this.commitCompleteSitemap(this.buffer.concat(data));
+			await this.writeSitemap(this.buffer.concat(data));
 			this.buffer = [];
 		} else if (this.buffer.length + data.length > maxItemsPerSitemap) {
 			// 1. get a chunk of the new data such that (currentItemCount + dataChunk.length == maxItemsPerSitemap)
 			// so it can be flushed out to the writer
 			const { length: bufferLength } = this.buffer;
 			const firstChunk = data.slice(0, maxItemsPerSitemap - bufferLength);
-			await this.commitCompleteSitemap(this.buffer.concat(firstChunk));
+			await this.writeSitemap(this.buffer.concat(firstChunk));
 			this.buffer = [];
 
 			// 2. for all chunks where (chunk.length == maxItemsPerSitemap), flush out to Writer
@@ -94,7 +94,7 @@ export default class SitemapGenerator {
 			).reverse();
 
 			for (const part of otherChunks) {
-				await this.commitCompleteSitemap(part);
+				await this.writeSitemap(part);
 			}
 
 			// 3. if the final chunk is (finalChunk.length < maxItemsPerSitemap),
@@ -102,31 +102,29 @@ export default class SitemapGenerator {
 			if (lastChunk.length < maxItemsPerSitemap) {
 				this.buffer = this.buffer.concat(lastChunk);
 			} else if (lastChunk.length === maxItemsPerSitemap) {
-				await this.commitCompleteSitemap(lastChunk);
+				await this.writeSitemap(lastChunk);
 			}
 		}
 	}
 
-	async commitCompleteSitemap(data: RawSiteMapData[]) {
-		await this.createSitemap();
-		await this.writer.writeChunk(this.formatter.format(data), this.sitemaps.length - 1);
-		await this.writer.commitSitemap(this.formatter.closingTag, this.sitemaps.length - 1);
+	async writeSitemap(data: RawSiteMapData[]) {
+		const { xmlDeclaration, openingTag, closingTag } = this.formatter;
+		const body = this.formatter.format(data);
+		const sitemap = [ xmlDeclaration, openingTag, body, closingTag ].join('');
+
+		const map = await this.writer.write(`sitemap-${this.sitemaps.length}.xml`, sitemap);
+		this.sitemaps.push(map);
 	}
 
-	async createSitemap() {
-		const { xmlDeclaration, openingTag } = this.formatter;
-		const path = await this.writer.createSitemap(xmlDeclaration, openingTag, this.sitemaps.length);
-		this.sitemaps.push(path);
-	}
-
-	async createIndexSitemap() {
+	async writeIndexSitemap() {
 		const numberIndexSitemaps = Math.ceil(this.sitemaps.length / this.options.maxItemsPerIndexSitemap);
 		const { hostname } = this.options;
 		const numberSitemaps = this.sitemaps.length;
 
-		for (let index = 0; index <= numberIndexSitemaps; index = index + 1) {
+		for (let index = 0; index < numberIndexSitemaps; index = index + 1) {
 			const indexSitemap = this.formatter.formatIndex({ path: this.publicPath, hostname, numberSitemaps });
-			await this.writer.createIndexSitemap(indexSitemap);
+
+			await this.writer.write('index-sitemap.xml', indexSitemap);
 		}
 	}
 }
