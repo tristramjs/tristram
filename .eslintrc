@@ -1,15 +1,14 @@
 {
   "extends": "@sep/eslint-config-sep",
-  "ecmaVersion": 2017,
-  "sourceType": "module",
   "globals": {
-    "google": true
+    "google": true,
+    "fetch": true,
   },
   "env": {
     "jest": true
   },
   "rules": {
-    "react/prop-types": 0,
-    "react/jsx-max-props-per-line": 0
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off"
   }
 }

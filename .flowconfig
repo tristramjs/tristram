@@ -5,6 +5,7 @@ flow-typed
 [options]
 esproposal.class_static_fields=enable
 esproposal.class_instance_fields=enable
+esproposal.export_star_as=enable
 module.ignore_non_literal_requires=true
 
 suppress_type=$FlowIssue
@@ -14,4 +15,4 @@ module.file_ext=.js
 module.file_ext=.json
 
 [version]
-0.56.0
+0.69.0

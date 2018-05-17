@@ -6,13 +6,16 @@
 	"scripts": {
 		"test": "jest",
 		"test-update": "jest -u",
-		"postinstall": "flow-typed install"
+		"build": "babel src --out-dir dist"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": ["sitemap", "seo"],
+	"keywords": [
+		"sitemap",
+		"seo"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -20,18 +23,41 @@
 	},
 	"homepage": "https://github.com/sambou/tristram#readme",
 	"devDependencies": {
-		"babel-plugin-transform-class-properties": "^6.24.1",
-		"babel-plugin-transform-flow-strip-types": "^6.22.0",
-		"babel-plugin-transform-object-rest-spread": "^6.26.0",
-		"babel-preset-env": "^1.6.0",
-		"flow-bin": "^0.56.0",
-		"flow-typed": "^2.1.5",
-		"jest": "^21.1.0",
-		"jest-cli": "^21.2.1"
+		"@babel/cli": "7.0.0-beta.44",
+		"@babel/core": "^7.0.0-beta.44",
+		"@babel/plugin-proposal-async-generator-functions": "^7.0.0-beta.44",
+		"@babel/plugin-proposal-export-namespace-from": "^7.0.0-beta.47",
+		"@babel/plugin-syntax-async-generators": "^7.0.0-beta.44",
+		"@babel/plugin-transform-flow-strip-types": "^7.0.0-beta.44",
+		"@babel/preset-env": "^7.0.0-beta.44",
+		"@babel/preset-stage-3": "^7.0.0-beta.44",
+		"@sep/eslint-config-sep": "^2.0.6",
+		"babel-core": "^7.0.0-0",
+		"babel-jest": "^22.4.3",
+		"eslint": "4.19.1",
+		"eslint-plugin-eslint-comments": "^2.0.2",
+		"eslint-plugin-flowtype": "2.46.1",
+		"eslint-plugin-import": "2.10.0",
+		"fetch-mock": "6.3.0",
+		"flow-bin": "0.69.0",
+		"flow-typed": "2.4.0",
+		"jest": "^22.4.0",
+		"jest-cli": "^22.4.0"
 	},
 	"dependencies": {
-		"@sep/eslint-config-sep": "^1.0.20",
-		"node-fetch": "^1.7.3",
-		"xmlbuilder": "^9.0.4"
+		"@babel/polyfill": "^7.0.0-beta.44",
+		"aws-sdk": "^2.221.1",
+		"es6-promise": "4.2.4",
+		"isomorphic-fetch": "^2.2.1",
+		"xmlbuilder": "9.0.7"
+	},
+	"jest": {
+		"setupFiles": [
+			"./config/jest.js"
+		],
+		"testPathIgnorePatterns": [
+			"<rootDir>/node_modules/",
+			"<rootDir>/__tests__/__testHelpers__/"
+		]
 	}
 }
