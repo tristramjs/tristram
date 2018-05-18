@@ -1,3 +1,5 @@
 /* @flow */
 
-export * as SitemapGenerator from './SitemapGenerator';
+import SitemapGenerator from './SitemapGenerator';
+
+export { SitemapGenerator };

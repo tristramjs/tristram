@@ -31,3 +31,27 @@ Array [
   },
 ]
 `;
+
+exports[`fetching.gqlConnection should retry at least 3 times on error 1`] = `
+Array [
+  Object {
+    "loc": "one",
+  },
+]
+`;
+
+exports[`fetching.gqlConnection should retry at least 3 times on error 2`] = `
+Array [
+  Object {
+    "loc": "two",
+  },
+]
+`;
+
+exports[`fetching.gqlConnection should stop retrying after 3 times on error and then throw 1`] = `
+Array [
+  Object {
+    "loc": "one",
+  },
+]
+`;
