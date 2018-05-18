@@ -1,6 +1,6 @@
 {
 	"name": "tristram",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "A pipeline for sitemap generation",
 	"main": "dist/index.js",
 	"scripts": {
