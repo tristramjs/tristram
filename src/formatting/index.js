@@ -2,6 +2,9 @@
 
 import type { RawSiteMapData, RawNewsSiteMapData } from '../types/sitemap';
 
+import PlainFormatter from './Plain';
+import NewsSiteMapFormatter from './NewsSiteMap';
+
 export interface Formatter {
 	xmlDeclaration: string;
 	openingTag: string;
@@ -15,3 +18,5 @@ export interface NewsSiteFormatter extends Formatter {
 	closingTagNews: string;
 	formatNews(data: RawNewsSiteMapData[]): string;
 }
+
+export { PlainFormatter, NewsSiteMapFormatter };
