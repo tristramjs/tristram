@@ -1,7 +1,5 @@
 /* @flow */
-/* eslint-disable import/no-extraneous-dependencies, import/first */
 import fetchMock from 'fetch-mock';
-/* eslint-enable import/no-extraneous-dependencies, import/first */
 
 import RelayConnectionFetcher from '../../src/fetching/RelayConnectionFetcher';
 

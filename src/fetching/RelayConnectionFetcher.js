@@ -11,6 +11,7 @@ type Props<T> = FetcherProps<T> & {
 	getConnection: GetConnection<T>,
 	query: string,
 	logErrors?: boolean,
+	maxRetries?: number,
 };
 
 type GetConnection<T> = <T>(x: Object) => GraphQlConnection<T>;
@@ -22,6 +23,7 @@ export default class RelayConnection<T> implements Fetcher {
 	chunkSize: number;
 	transformResult: T => RawSiteMapData;
 	logErrors: boolean;
+	maxRetries: number;
 	getConnection: GetConnection<T>;
 	variables: {
 		first: number,
@@ -31,12 +33,13 @@ export default class RelayConnection<T> implements Fetcher {
 	};
 
 	constructor({
-		url, getConnection, transformResult, query, chunkSize, logErrors,
+		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries,
 	}: Props<T>) {
 		this.url = url;
 		this.getConnection = getConnection;
 		this.transformResult = transformResult;
 		this.query = query;
+		this.maxRetries = maxRetries || 3;
 		this.chunkSize = chunkSize || 100;
 		this.logErrors = logErrors || false;
 	}
@@ -70,7 +73,7 @@ export default class RelayConnection<T> implements Fetcher {
 			body: JSON.stringify({ query, variables }),
 		};
 
-		while (retries < 3) {
+		while (retries < this.maxRetries) {
 			const res = await fetch(url, options);
 			const data = await res.json();
 
