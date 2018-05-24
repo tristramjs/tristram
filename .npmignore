@@ -64,3 +64,5 @@ tmp
 minio
 
 __tests__
+
+.npmrc
