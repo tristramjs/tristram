@@ -2,6 +2,8 @@
 
 # Tristram
 
+[![Build Status](https://travis-ci.org/tristramjs/tristram.svg?branch=master)](https://travis-ci.org/tristramjs/tristram)
+
 ## Stuff ❤️
 
 cool things to know in here 💡
