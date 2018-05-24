@@ -11,7 +11,7 @@ import type { NewsSiteFormatter } from './index';
 
 export default class NewsSiteMapFormatter implements NewsSiteFormatter {
 	xmlDeclaration = '<?xml version="1.0"?>';
-	openingTag = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" @xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">';
+	openingTag = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">';
 	closingTag = '</urlset>';
 	// eslint-disable-next-line class-methods-use-this
 	format(data: RawNewsSiteMapData[]): string {
