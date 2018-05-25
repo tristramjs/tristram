@@ -12,7 +12,7 @@ describe('formatNews', () => {
 					language: 'de_de',
 				},
 				genres: 'Blog',
-				publication_date: new Date('1995-12-17T03:24:00'),
+				publication_date: '1995-12-17T02:24:00.000Z',
 				title: 'something',
 				keywords: [ 'unrelated', 'bla', 'bla' ],
 				stock_tickers: 'nyt',

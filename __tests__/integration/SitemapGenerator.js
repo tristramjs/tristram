@@ -42,21 +42,6 @@ describe('SitemapGenerator module', () => {
 				const returnData = { ...data };
 				returnData.loc = data.id;
 				delete returnData.id;
-				if (data.lastmod) {
-					returnData.lastmod = new Date(data.lastmod);
-				}
-				if (data.video) {
-					returnData.video = data.video.map((item) => {
-						const returnItem = { ...item };
-						if (item.expiration_date) {
-							returnItem.expiration_date = new Date(item.expiration_date);
-						}
-						if (item.publication_date) {
-							returnItem.publication_date = new Date(item.publication_date);
-						}
-						return returnItem;
-					});
-				}
 				return returnData;
 			},
 		});

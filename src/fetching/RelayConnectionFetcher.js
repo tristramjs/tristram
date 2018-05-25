@@ -79,6 +79,7 @@ export default class RelayConnection<T> implements Fetcher {
 
 			if (data.errors && Array.isArray(data.errors)) {
 				if (logErrors) {
+					// eslint-disable-next-line no-console
 					console.log(
 						`RelayConnectionFetcher: Received errors in connection:\n"${data.errors
 							.map(err => (err.message ? err.message : '<no error message provided>'))
