@@ -11,7 +11,7 @@ export default function newsSiteMapDataMapper(item: RawNewsSiteMapData): MappedN
 		}
 		if (item.news.publication_date) {
 			// $FlowFixMe
-			updated.news.publication_date = item.news.publication_date.toISOString();
+			updated.news.publication_date = item.news.publication_date;
 		}
 		if (item.news.genres && Array.isArray(item.news.genres)) {
 			// $FlowFixMe

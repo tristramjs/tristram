@@ -48,10 +48,10 @@ export function mapImage(image: Object | Array<*>) {
 export function mapVideoData(obj: Object) {
 	const updated = { ...obj };
 	if (obj.expiration_date) {
-		updated.expiration_date = obj.expiration_date.toISOString();
+		updated.expiration_date = obj.expiration_date;
 	}
 	if (obj.publication_date) {
-		updated.publication_date = obj.publication_date.toISOString();
+		updated.publication_date = obj.publication_date;
 	}
 	if (obj.family_friendly !== null || obj.family_friendly !== undefined) {
 		updated.family_friendly = boolToText(obj.family_friendly);
@@ -126,7 +126,7 @@ export function mapVideo(video: Object | Array<*>) {
 export function siteMapDataMapper(item: RawSiteMapData): MappedSiteMapData {
 	const updated = { ...item };
 	if (item.lastmod) {
-		updated.lastmod = item.lastmod.toISOString();
+		updated.lastmod = item.lastmod;
 	}
 	if (item.image) {
 		updated['image:image'] = mapImage(item.image);
