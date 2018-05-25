@@ -13,10 +13,7 @@
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": [
-		"sitemap",
-		"seo"
-	],
+	"keywords": ["sitemap", "seo"],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -53,12 +50,7 @@
 		"xmlbuilder": "9.0.7"
 	},
 	"jest": {
-		"setupFiles": [
-			"./config/jest.js"
-		],
-		"testPathIgnorePatterns": [
-			"<rootDir>/node_modules/",
-			"<rootDir>/__tests__/__testHelpers__/"
-		]
+		"setupFiles": ["./config/jest.js"],
+		"testPathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/__tests__/__testHelpers__/"]
 	}
 }
