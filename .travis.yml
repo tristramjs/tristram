@@ -3,3 +3,4 @@ node_js:
   - "8"
 before_install:
 - export TZ=Europe/Berlin
+after_success: 'npm run coveralls'

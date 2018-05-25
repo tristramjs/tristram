@@ -3,7 +3,8 @@
 # Tristram
 
 [![Build Status](https://travis-ci.org/tristramjs/tristram.svg?branch=master)](https://travis-ci.org/tristramjs/tristram)
-
+[![Coverage Status](https://coveralls.io/repos/github/tristramjs/tristram/badge.svg?branch=master)](https://coveralls.io/github/tristramjs/tristram?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/tristramjs/tristram/badge.svg?branch=coveralls)](https://coveralls.io/github/tristramjs/tristram?branch=coveralls)
 ## Stuff ❤️
 
 cool things to know in here 💡

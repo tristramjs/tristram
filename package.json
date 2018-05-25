@@ -4,16 +4,20 @@
 	"description": "A pipeline for sitemap generation",
 	"main": "dist/index.js",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --coverage",
 		"test-update": "jest -u",
 		"build": "babel src --out-dir dist",
-		"prepublishOnly": "npm test && npm run build"
+		"prepublishOnly": "npm test && npm run build",
+		"coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/sambou/tristram.git"
 	},
-	"keywords": ["sitemap", "seo"],
+	"keywords": [
+		"sitemap",
+		"seo"
+	],
 	"author": "",
 	"license": "MIT",
 	"bugs": {
@@ -32,6 +36,7 @@
 		"@sep/eslint-config-sep": "^2.0.6",
 		"babel-core": "^7.0.0-0",
 		"babel-jest": "^22.4.3",
+		"coveralls": "^3.0.1",
 		"eslint": "4.19.1",
 		"eslint-plugin-eslint-comments": "^2.0.2",
 		"eslint-plugin-flowtype": "2.46.1",
@@ -50,7 +55,12 @@
 		"xmlbuilder": "9.0.7"
 	},
 	"jest": {
-		"setupFiles": ["./config/jest.js"],
-		"testPathIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/__tests__/__testHelpers__/"]
+		"setupFiles": [
+			"./config/jest.js"
+		],
+		"testPathIgnorePatterns": [
+			"<rootDir>/node_modules/",
+			"<rootDir>/__tests__/__testHelpers__/"
+		]
 	}
 }
