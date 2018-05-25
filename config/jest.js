@@ -21,7 +21,7 @@ fetchMock.post(
 						{
 							node: {
 								id: 'one',
-								lastmod: '2009-11-05T19:20:30+08:00',
+								lastmod: '2009-11-05T11:20:30.000Z',
 								priority: 0.5,
 								changefreq: 'never',
 							},
@@ -94,10 +94,10 @@ fetchMock.post(
 										content_loc: 'http://www.example.com/video123.mp4',
 										player_loc: { loc: 'http://www.example.com/videoplayer.mp4?video=123' },
 										duration: '600',
-										expiration_date: '2009-11-05T19:20:30+08:00',
+										expiration_date: '2009-11-05T11:20:30.000Z',
 										rating: 4.2,
 										view_count: 12345,
-										publication_date: '2007-11-05T19:20:30+08:00',
+										publication_date: '2007-11-05T11:20:30.000Z',
 										family_friendly: true,
 										tag: [ 'This', 'is', 'a', 'tag' ],
 										restriction: { relationship: 'deny', countrys: [ 'GB', 'US' ] },

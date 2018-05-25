@@ -54,15 +54,15 @@ describe('format.js', () => {
 		const expectedOutput = {
 			url: {
 				loc,
-				lastmod: date.toISOString(),
+				lastmod: date,
 				'image:image': [ { 'image:loc': loc }, { 'image:loc': loc } ],
 				'video:video': [
 					{
 						'video:thumbnail_loc': loc,
 						'video:title': 'title',
 						'video:description': 'description',
-						'video:expiration_date': date.toISOString(),
-						'video:publication_date': date.toISOString(),
+						'video:expiration_date': date,
+						'video:publication_date': date,
 						'video:family_friendly': 'yes',
 						'video:requires_subscription': 'no',
 						'video:live': 'no',
