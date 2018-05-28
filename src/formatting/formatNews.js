@@ -27,6 +27,5 @@ export default function newsSiteMapDataMapper(item: RawNewsSiteMapData): MappedN
 		delete updated.news;
 	}
 
-	// $FlowFixMe
 	return { url: updated };
 }

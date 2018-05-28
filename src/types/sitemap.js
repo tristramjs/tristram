@@ -104,16 +104,18 @@ export type MappedSiteMapData = {
 };
 
 export type MappedNewsSiteMapData = {
-	loc: string,
-	'news:news': {
-		'news:publication': {
-			'news:name': string,
-			'news:language': string,
+	url: {
+		loc: string,
+		'news:news': {
+			'news:publication': {
+				'news:name': string,
+				'news:language': string,
+			},
+			'news:genres'?: string | string[],
+			'news:publication_date': string,
+			'news:title': string,
+			'news:keywords'?: string | string[],
+			'news:stock_tickers'?: string | string[],
 		},
-		'news:genres'?: string | string[],
-		'news:publication_date': string,
-		'news:title': string,
-		'news:keywords'?: string | string[],
-		'news:stock_tickers'?: string | string[],
-	},
+	}
 };
