@@ -27,5 +27,5 @@ export default function newsSiteMapDataMapper(item: RawNewsSiteMapData): MappedN
 		delete updated.news;
 	}
 
-	return updated;
+	return { url: updated };
 }
