@@ -1,6 +1,4 @@
 /* @flow */
-import type { RawSiteMapData } from '../types/sitemap';
-
 import SyncFetcher from './SyncFetcher';
 
 import type { Fetcher, FetcherProps } from './index';
@@ -8,26 +6,26 @@ import type { Fetcher, FetcherProps } from './index';
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-type Props<T> = FetcherProps<T> & {
+type Props<T, S> = FetcherProps<T, S> & {
 	fetchOptions?: $FlowFixMe,
 };
 
-export default class HttpFetcher<T> implements Fetcher {
+export default class HttpFetcher<T, Data> implements Fetcher<Data[]> {
 	url: string;
-	transformResult: T => RawSiteMapData;
+	transformResult: T => Data;
 	fetchOptions: $FlowFixMe;
 
-	constructor(props: Props<T>) {
+	constructor(props: Props<T, Data>) {
 		this.url = props.url;
 		this.transformResult = props.transformResult;
 		this.fetchOptions = props.fetchOptions;
 	}
 
-	async* getData(): AsyncIterator<RawSiteMapData[]> {
+	async* getData(): AsyncIterator<Data[]> {
 		const res = await fetch(this.url, this.fetchOptions);
 		const rawData = await res.json();
 		const data = this.transformResult(rawData);
 
-		yield* new SyncFetcher({ data }).getData();
+		yield* new SyncFetcher({ data: [ data ] }).getData();
 	}
 }
