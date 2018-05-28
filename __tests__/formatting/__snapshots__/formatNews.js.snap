@@ -2,17 +2,19 @@
 
 exports[`formatNews newsSiteMapDataMapper 1`] = `
 Object {
-  "loc": "br.de/something",
-  "news:news": Object {
-    "news:genres": "Blog",
-    "news:keywords": "unrelated, bla, bla",
-    "news:publication": Object {
-      "news:language": "de_de",
-      "news:name": "Bayerischer Rundfunk",
+  "url": Object {
+    "loc": "br.de/something",
+    "news:news": Object {
+      "news:genres": "Blog",
+      "news:keywords": "unrelated, bla, bla",
+      "news:publication": Object {
+        "news:language": "de_de",
+        "news:name": "Bayerischer Rundfunk",
+      },
+      "news:publication_date": "1995-12-17T02:24:00.000Z",
+      "news:stock_tickers": "nyt",
+      "news:title": "something",
     },
-    "news:publication_date": "1995-12-17T02:24:00.000Z",
-    "news:stock_tickers": "nyt",
-    "news:title": "something",
   },
 }
 `;
