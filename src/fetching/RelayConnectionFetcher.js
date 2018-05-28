@@ -1,12 +1,10 @@
 /* @flow */
-import type { RawSiteMapData } from '../types/sitemap';
-
 import type { Fetcher, FetcherProps } from './index';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-type Props<T> = FetcherProps<T> & {
+type Props<T, S> = FetcherProps<T, S> & {
 	chunkSize?: number,
 	getConnection: GetConnection<T>,
 	query: string,
@@ -17,11 +15,11 @@ type Props<T> = FetcherProps<T> & {
 type GetConnection<T> = <T>(x: Object) => GraphQlConnection<T>;
 type GraphQlConnection<T> = { edges: { node: T, cursor: string }[], pageInfo: { hasNextPage: boolean } };
 
-export default class RelayConnection<T> implements Fetcher {
+export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	url: string;
 	query: string;
 	chunkSize: number;
-	transformResult: T => RawSiteMapData;
+	transformResult: T => Data;
 	logErrors: boolean;
 	maxRetries: number;
 	getConnection: GetConnection<T>;
@@ -34,7 +32,7 @@ export default class RelayConnection<T> implements Fetcher {
 
 	constructor({
 		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries,
-	}: Props<T>) {
+	}: Props<T, Data>) {
 		this.url = url;
 		this.getConnection = getConnection;
 		this.transformResult = transformResult;
@@ -44,7 +42,7 @@ export default class RelayConnection<T> implements Fetcher {
 		this.logErrors = logErrors || false;
 	}
 
-	async* getData(): AsyncGenerator<RawSiteMapData[], void, void> {
+	async* getData(): AsyncGenerator<Data[], void, void> {
 		let hasNextPage;
 
 		do {

@@ -6,9 +6,9 @@ import type { RawSiteMapData } from '../types/sitemap';
 import { siteMapDataMapper } from './format';
 import createIndexSitemap from './formatIndex';
 
-import type { Formatter } from './index';
+import type { SitemapFormatter } from './index';
 
-export default class PlainFormatter implements Formatter {
+export default class PlainFormatter implements SitemapFormatter {
 	xmlDeclaration = '<?xml version="1.0"?>';
 	openingTag = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">';
 	closingTag = '</urlset>';

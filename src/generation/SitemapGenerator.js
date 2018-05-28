@@ -5,6 +5,9 @@ import type { Formatter } from '../formatting';
 import type { RawSiteMapData } from '../types/sitemap';
 import chunk from '../util/chunk';
 
+import type { FeedGenerator } from './index';
+
+
 // options management? We have several Modules who needs to know about options
 export type Options = {
 	hostname: string,
@@ -15,9 +18,9 @@ export type Options = {
 };
 
 type Props = {
-	fetchers: Fetcher[],
+	fetchers: Fetcher<RawSiteMapData[]>[],
 	// formatter types..
-	formatter: Formatter,
+	formatter: Formatter<RawSiteMapData[]>,
 	options: Options,
 	writer: Writer,
 };
@@ -31,9 +34,9 @@ export type OptionsWithDefaults = {
 
 type Sitemap = string;
 
-export default class SitemapGenerator {
-	fetchers: Fetcher[];
-	formatter: Formatter;
+export default class SitemapGenerator implements FeedGenerator<RawSiteMapData[]> {
+	fetchers: Fetcher<*>[];
+	formatter: Formatter<*>;
 	options: OptionsWithDefaults;
 	writer: Writer;
 	sitemaps: Sitemap[];

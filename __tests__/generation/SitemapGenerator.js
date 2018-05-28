@@ -1,22 +1,23 @@
 /* @flow */
+import type { Fetcher } from '../../src/fetching/index';
 import SitemapGenerator from '../../src/generation/SitemapGenerator';
 import SyncFetcher from '../../src/fetching/SyncFetcher';
 import PlainFormatter from '../../src/formatting/Plain';
 import InMemoryWriter from '../../src/writing/InMemoryWriter';
 
-const fooFetcher = new SyncFetcher({
+const fooFetcher: Fetcher<*> = new SyncFetcher({
 	data: [ { loc: 'foo' }, { loc: 'bar' }, { loc: 'qak' } ],
 });
 
-const barFetcher = new SyncFetcher({
+const barFetcher: Fetcher<*> = new SyncFetcher({
 	data: [ { loc: 'Brrrr' } ],
 });
 
-const bazFetcher = new SyncFetcher({
+const bazFetcher: Fetcher<*> = new SyncFetcher({
 	data: [ { loc: 'rrrbbbbB' }, { loc: 'aksjaskjf' } ],
 });
 
-const qakFetcher = new SyncFetcher({
+const qakFetcher: Fetcher<*> = new SyncFetcher({
 	data: [ { loc: 'Rhabarber' }, { loc: 'Rucola' }, { loc: 'Skoda' }, { loc: 'Petersilie' }, { loc: 'Rindsgulasch' } ],
 });
 

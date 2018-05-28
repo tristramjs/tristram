@@ -4,7 +4,7 @@
 	"description": "A pipeline for sitemap generation",
 	"main": "dist/index.js",
 	"scripts": {
-		"test": "jest --coverage",
+		"test": "flow-typed install && flow && jest --coverage",
 		"test-update": "jest -u",
 		"build": "babel src --out-dir dist",
 		"prepublishOnly": "npm test && npm run build",

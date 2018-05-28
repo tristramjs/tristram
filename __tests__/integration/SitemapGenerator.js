@@ -1,5 +1,5 @@
 /* @flow */
-
+import type { Fetcher } from '../../src/fetching/index';
 import { setup, cleanup } from '../__testHelpers__/fs';
 import { readdir, readfile } from '../../src/util/fs';
 import SitemapGenerator from '../../src/generation/SitemapGenerator';
@@ -16,11 +16,11 @@ describe('SitemapGenerator module', () => {
 	it('should run without errors', async () => {
 		const options = { hostname: 'foo.bar', maxItemsPerSitemap: 2 };
 
-		const syncFetcher = new SyncFetcher({
+		const syncFetcher: Fetcher<*> = new SyncFetcher({
 			data: [ { loc: 'quz' }, { loc: 'qaz' }, { loc: 'qak' } ],
 		});
 
-		const chunkFetcher = new RelayConnectionFetcher({
+		const chunkFetcher: Fetcher<*> = new RelayConnectionFetcher({
 			url: 'http://test.com/graphql',
 			query: /* GraphQL */ `query Test($first: Int!, $after: String) {
 				viewer {
