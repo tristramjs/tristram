@@ -53,13 +53,13 @@ export function mapVideoData(obj: Object) {
 	if (obj.publication_date) {
 		updated.publication_date = obj.publication_date;
 	}
-	if (obj.family_friendly !== null || obj.family_friendly !== undefined) {
+	if (obj.family_friendly !== null && obj.family_friendly !== undefined) {
 		updated.family_friendly = boolToText(obj.family_friendly);
 	}
-	if (obj.requires_subscription !== null || obj.requires_subscription !== undefined) {
+	if (obj.requires_subscription !== null && obj.requires_subscription !== undefined) {
 		updated.requires_subscription = boolToText(obj.requires_subscription);
 	}
-	if (obj.live !== null || obj.live !== undefined) {
+	if (obj.live !== null && obj.live !== undefined) {
 		updated.live = boolToText(obj.live);
 	}
 	if (obj.restriction) {
