@@ -26,6 +26,10 @@ export default class HttpFetcher<T, Data> implements Fetcher<Data[]> {
 		const rawData = await res.json();
 		const data = this.transformResult(rawData);
 
-		yield* new SyncFetcher({ data: [ data ] }).getData();
+		if (Array.isArray(data)) {
+			yield* new SyncFetcher({ data }).getData();
+		} else {
+			yield* new SyncFetcher({ data: [ data ] }).getData();
+		}
 	}
 }
