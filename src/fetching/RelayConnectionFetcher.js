@@ -22,7 +22,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	transformResult: (T, ?Array<{ message: string }>) => Data;
 	logErrors: boolean;
 	maxRetries: number;
-	retrieCodes: [number];
+	retryCodes: [number];
 	exitCodes: [number];
 	getConnection: GetConnection<T>;
 	variables: {
@@ -33,7 +33,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	};
 
 	constructor({
-		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries, retrieCodes, exitCodes,
+		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries, retryCodes, exitCodes,
 	}: Props<T, Data>) {
 		this.url = url;
 		this.getConnection = getConnection;
@@ -43,7 +43,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		this.chunkSize = chunkSize || 100;
 		this.logErrors = logErrors || false;
 		/* eslint-disable line-comment-position */
-		this.retrieCodes = retrieCodes || [
+		this.retryCodes = retryCodes || [
 			408, // Request Timeout
 			429, // Too Many Requests
 			449, // The request should be retried after doing the appropriate action
@@ -78,7 +78,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 
 	async fetchConnection(): Promise<GraphQlConnection<T>> {
 		const {
-			url, query, variables, getConnection, logErrors, retrieCodes, exitCodes,
+			url, query, variables, getConnection, logErrors, retryCodes, exitCodes,
 		} = this;
 		let retries = 0;
 		const options = {
@@ -93,7 +93,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 			try {
 				const res = await fetch(url, options);
 				const { status } = res;
-				if (retrieCodes.includes(status)) {
+				if (retryCodes.includes(status)) {
 					retries = retries + 1;
 					// eslint-disable-next-line no-console
 					console.log(`RelayConnectionFetcher: retry after server response code ${status}`);
