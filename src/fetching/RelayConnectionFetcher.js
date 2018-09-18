@@ -9,6 +9,7 @@ type Props<T, S> = FetcherProps<T, S> & {
 	getConnection: GetConnection<T>,
 	query: string,
 	logErrors?: boolean,
+	ignoreDataErrors?: boolean,
 	maxRetries?: number,
 };
 
@@ -21,6 +22,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	chunkSize: number;
 	transformResult: T => Data;
 	logErrors: boolean;
+	ignoreDataErrors: boolean;
 	maxRetries: number;
 	getConnection: GetConnection<T>;
 	variables: {
@@ -31,7 +33,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	};
 
 	constructor({
-		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries,
+		url, getConnection, transformResult, query, chunkSize, logErrors, ignoreDataErrors, maxRetries,
 	}: Props<T, Data>) {
 		this.url = url;
 		this.getConnection = getConnection;
@@ -40,6 +42,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		this.maxRetries = maxRetries || 3;
 		this.chunkSize = chunkSize || 100;
 		this.logErrors = logErrors || false;
+		this.ignoreDataErrors = ignoreDataErrors || false;
 	}
 
 	async* getData(): AsyncGenerator<Data[], void, void> {
@@ -60,7 +63,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 
 	async fetchConnection(): Promise<GraphQlConnection<T>> {
 		const {
-			url, query, variables, getConnection, logErrors,
+			url, query, variables, getConnection, logErrors, ignoreDataErrors
 		} = this;
 		let retries = 0;
 		const options = {
@@ -75,7 +78,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 			const res = await fetch(url, options);
 			const data = await res.json();
 
-			if (data.errors && Array.isArray(data.errors)) {
+			if (!ignoreDataErrors && data.errors && Array.isArray(data.errors)) {
 				if (logErrors) {
 					// eslint-disable-next-line no-console
 					console.log(
