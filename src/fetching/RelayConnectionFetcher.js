@@ -9,7 +9,6 @@ type Props<T, S> = FetcherProps<T, S> & {
 	getConnection: GetConnection<T>,
 	query: string,
 	logErrors?: boolean,
-	ignoreDataErrors?: boolean,
 	maxRetries?: number,
 };
 
@@ -22,7 +21,6 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	chunkSize: number;
 	transformResult: T => Data;
 	logErrors: boolean;
-	ignoreDataErrors: boolean;
 	maxRetries: number;
 	getConnection: GetConnection<T>;
 	variables: {
@@ -33,7 +31,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	};
 
 	constructor({
-		url, getConnection, transformResult, query, chunkSize, logErrors, ignoreDataErrors, maxRetries,
+		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries,
 	}: Props<T, Data>) {
 		this.url = url;
 		this.getConnection = getConnection;
@@ -42,7 +40,6 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		this.maxRetries = maxRetries || 3;
 		this.chunkSize = chunkSize || 100;
 		this.logErrors = logErrors || false;
-		this.ignoreDataErrors = ignoreDataErrors || false;
 	}
 
 	async* getData(): AsyncGenerator<Data[], void, void> {
@@ -51,7 +48,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		do {
 			const data: GraphQlConnection<T> = await this.fetchConnection();
 
-			yield data.edges.map(edge => this.transformResult(edge.node));
+			yield data.edges.map(edge => this.transformResult(edge.node, data.errors));
 			({ hasNextPage } = data.pageInfo);
 
 			this.variables = {
@@ -63,7 +60,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 
 	async fetchConnection(): Promise<GraphQlConnection<T>> {
 		const {
-			url, query, variables, getConnection, logErrors, ignoreDataErrors
+			url, query, variables, getConnection, logErrors
 		} = this;
 		let retries = 0;
 		const options = {
@@ -75,22 +72,17 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		};
 
 		while (retries < this.maxRetries) {
-			const res = await fetch(url, options);
-			const data = await res.json();
+			try {
+				const res = await fetch(url, options);
+				const data = await res.json();
 
-			if (!ignoreDataErrors && data.errors && Array.isArray(data.errors)) {
+				return getConnection(data);
+			} catch (error) {
 				if (logErrors) {
 					// eslint-disable-next-line no-console
-					console.log(
-						`RelayConnectionFetcher: Received errors in connection:\n"${data.errors
-							.map(err => (err.message ? err.message : '<no error message provided>'))
-							.join('\n')}"`
-					);
+					console.log("RelayConnectionFetcher: Received errors while fetching connection: ", error);
+					retries = retries + 1;
 				}
-
-				retries = retries + 1;
-			} else {
-				return getConnection(data);
 			}
 		}
 
