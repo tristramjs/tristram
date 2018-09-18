@@ -19,9 +19,11 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	url: string;
 	query: string;
 	chunkSize: number;
-	transformResult: T => Data;
+	transformResult: (T, ?Array<{ message: string, ...any }>) => Data;
 	logErrors: boolean;
 	maxRetries: number;
+	retrieCodes: [number];
+	exitCodes: [number];
 	getConnection: GetConnection<T>;
 	variables: {
 		first: number,
@@ -31,7 +33,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	};
 
 	constructor({
-		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries,
+		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries, retrieCodes, exitCodes,
 	}: Props<T, Data>) {
 		this.url = url;
 		this.getConnection = getConnection;
@@ -40,6 +42,8 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		this.maxRetries = maxRetries || 3;
 		this.chunkSize = chunkSize || 100;
 		this.logErrors = logErrors || false;
+		this.retrieCodes = retrieCodes || [ 429, 500 ];
+		this.exitCodes = exitCodes || [ 404 ];
 	}
 
 	async* getData(): AsyncGenerator<Data[], void, void> {
@@ -60,7 +64,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 
 	async fetchConnection(): Promise<GraphQlConnection<T>> {
 		const {
-			url, query, variables, getConnection, logErrors
+			url, query, variables, getConnection, logErrors, retrieCodes, exitCodes,
 		} = this;
 		let retries = 0;
 		const options = {
@@ -74,14 +78,20 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		while (retries < this.maxRetries) {
 			try {
 				const res = await fetch(url, options);
-				const data = await res.json();
-
-				return getConnection(data);
+				if (retrieCodes.includes(res.statusCode)) {
+					retries = retries + 1;
+					// eslint-disable-next-line no-console
+					console.log(`RelayConnectionFetcher: retry after server response code ${res.statusCode}`);
+				} else if (exitCodes.includes(res.statusCode)) {
+					throw new Error(`server response error ${res.statusCode}`);
+				} else {
+					const data = await res.json();
+					return getConnection(data);
+				}
 			} catch (error) {
 				if (logErrors) {
 					// eslint-disable-next-line no-console
-					console.log("RelayConnectionFetcher: Received errors while fetching connection: ", error);
-					retries = retries + 1;
+					console.log('RelayConnectionFetcher: Received errors while fetching connection: ', error);
 				}
 			}
 		}
