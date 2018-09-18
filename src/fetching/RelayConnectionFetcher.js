@@ -78,12 +78,13 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		while (retries < this.maxRetries) {
 			try {
 				const res = await fetch(url, options);
-				if (retrieCodes.includes(res.statusCode)) {
+				const { status } = res;
+				if (retrieCodes.includes(status)) {
 					retries = retries + 1;
 					// eslint-disable-next-line no-console
-					console.log(`RelayConnectionFetcher: retry after server response code ${res.statusCode}`);
-				} else if (exitCodes.includes(res.statusCode)) {
-					throw new Error(`server response error ${res.statusCode}`);
+					console.log(`RelayConnectionFetcher: retry after server response code ${status}`);
+				} else if (exitCodes.includes(status)) {
+					throw new Error(`server response error ${status}`);
 				} else {
 					const data = await res.json();
 					return getConnection(data);
