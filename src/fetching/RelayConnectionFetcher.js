@@ -19,7 +19,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	url: string;
 	query: string;
 	chunkSize: number;
-	transformResult: (T, ?Array<{ message: string, ...any }>) => Data;
+	transformResult: (T, ?Array<{ message: string }>) => Data;
 	logErrors: boolean;
 	maxRetries: number;
 	retrieCodes: [number];
@@ -42,8 +42,22 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		this.maxRetries = maxRetries || 3;
 		this.chunkSize = chunkSize || 100;
 		this.logErrors = logErrors || false;
-		this.retrieCodes = retrieCodes || [ 429, 500 ];
-		this.exitCodes = exitCodes || [ 404 ];
+		/* eslint-disable line-comment-position */
+		this.retrieCodes = retrieCodes || [
+			408, // Request Timeout
+			429, // Too Many Requests
+			449, // The request should be retried after doing the appropriate action
+			499, // Client Closed Request
+			500, // Internal Server Error
+			502, // Bad Gateway
+			503, // Service Unavailable
+			504, // Gateway Timeout
+		];
+		this.exitCodes = exitCodes || [
+			400, // Bad Request
+			404, // Not Found
+		];
+		/* eslint-enable line-comment-position */
 	}
 
 	async* getData(): AsyncGenerator<Data[], void, void> {
