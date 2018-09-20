@@ -88,6 +88,37 @@ describe('fetching.gqlConnection', () => {
 			expect(err).toEqual(new Error('Error fetching connection, tried 3 times.'));
 		}
 	});
+
+	it('should stop immediately on major error and then throw', async () => {
+		const fetcher = new RelayConnectionFetcher({
+			url: 'http://error3.com/graphql',
+			query: /* GraphQL */ `query Test($first: Int!, $after: String) {
+				viewer {
+					allTestItems(first: $first, after: $after) {
+						pageInfo {
+							hasNext
+						}
+						edges {
+							cursor
+							node {
+								id
+							}
+						}
+					}
+				}
+			}`,
+			getConnection: conn => conn.data.viewer.allTestItems,
+			transformResult: ({ id }) => ({ loc: id }),
+		});
+
+		try {
+			for await (const item of fetcher.getData()) {
+				expect(item).toMatchSnapshot();
+			}
+		} catch (err) {
+			expect(err).toEqual(new Error('server response error 404'));
+		}
+	});
 });
 
 fetchMock.post(
@@ -212,4 +243,19 @@ fetchMock.post(
 		repeat: 4,
 		overwriteRoutes: true,
 	}
+);
+
+fetchMock.post(
+	(url, opts) => {
+		const body = JSON.parse(opts.body);
+		return url === 'http://error3.com/graphql' && body.variables.after == null;
+	},
+	{
+		body: {
+			data: null,
+			errors: [ { message: "It's dead Jim." } ],
+		},
+		status: 404,
+	},
+	{ overwriteRoutes: true }
 );
