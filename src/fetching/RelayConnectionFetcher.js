@@ -106,8 +106,10 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 				const { status } = res;
 				if (retryCodes.includes(status)) {
 					retries = retries + 1;
-					// eslint-disable-next-line no-console
-					console.log(`RelayConnectionFetcher: retry after server response code ${status}`);
+					if (logErrors) {
+						// eslint-disable-next-line no-console
+						console.log(`RelayConnectionFetcher: retry after server response code ${status}`);
+					}
 				} else if (exitCodes.includes(status)) {
 					throw new Error(`server response error ${status}`);
 				} else {
@@ -120,8 +122,9 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 			} catch (error) {
 				if (logErrors) {
 					// eslint-disable-next-line no-console
-					console.log('RelayConnectionFetcher: Received errors while fetching connection: ', error);
+					console.log('RelayConnectionFetcher: Received major error while fetching connection: ', error);
 				}
+				throw error;
 			}
 		}
 

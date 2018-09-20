@@ -125,8 +125,11 @@ fetchMock.post(
 		return url === 'http://error.com/graphql' && body.variables.after === 'two';
 	},
 	{
-		data: null,
-		errors: [ { message: "It's dead Jim." } ],
+		body: {
+			data: null,
+			errors: [ { message: "It's dead Jim." } ],
+		},
+		status: 429,
 	},
 	{
 		repeat: 2,
@@ -199,8 +202,11 @@ fetchMock.post(
 		return url === 'http://error2.com/graphql' && body.variables.after === 'two';
 	},
 	{
-		data: null,
-		errors: [ { message: "It's dead Jim." } ],
+		body: {
+			data: null,
+			errors: [ { message: "It's dead Jim." } ],
+		},
+		status: 429,
 	},
 	{
 		repeat: 4,
