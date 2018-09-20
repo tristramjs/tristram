@@ -10,20 +10,24 @@ type Props<T, S> = FetcherProps<T, S> & {
 	query: string,
 	logErrors?: boolean,
 	maxRetries?: number,
+	retryCodes?: Array<number>;
+	exitCodes?: Array<number>;
 };
 
 type GetConnection<T> = <T>(x: Object) => GraphQlConnection<T>;
 type GraphQlConnection<T> = { edges: { node: T, cursor: string }[], pageInfo: { hasNextPage: boolean } };
+type GraphQlErrors = Array<{ message: string }>;
+type FetchResult<T> = { data: GraphQlConnection<T>, errors: ?GraphQlErrors };
 
 export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	url: string;
 	query: string;
 	chunkSize: number;
-	transformResult: (T, ?Array<{ message: string }>) => Data;
+	transformResult: (T, ?GraphQlErrors) => Data;
 	logErrors: boolean;
 	maxRetries: number;
-	retryCodes: [number];
-	exitCodes: [number];
+	retryCodes: Array<number>;
+	exitCodes: Array<number>;
 	getConnection: GetConnection<T>;
 	variables: {
 		first: number,
@@ -33,7 +37,14 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 	};
 
 	constructor({
-		url, getConnection, transformResult, query, chunkSize, logErrors, maxRetries, retryCodes, exitCodes,
+		url,
+		getConnection,
+		transformResult,
+		query, chunkSize,
+		logErrors,
+		maxRetries,
+		retryCodes,
+		exitCodes,
 	}: Props<T, Data>) {
 		this.url = url;
 		this.getConnection = getConnection;
@@ -64,9 +75,9 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		let hasNextPage;
 
 		do {
-			const data: GraphQlConnection<T> = await this.fetchConnection();
+			const { data, errors } = await this.fetchConnection();
 
-			yield data.edges.map(edge => this.transformResult(edge.node, data.errors));
+			yield data.edges.map(edge => this.transformResult(edge.node, errors));
 			({ hasNextPage } = data.pageInfo);
 
 			this.variables = {
@@ -76,7 +87,7 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 		} while (hasNextPage);
 	}
 
-	async fetchConnection(): Promise<GraphQlConnection<T>> {
+	async fetchConnection(): Promise<FetchResult<T>> {
 		const {
 			url, query, variables, getConnection, logErrors, retryCodes, exitCodes,
 		} = this;
@@ -101,7 +112,10 @@ export default class RelayConnection<T, Data> implements Fetcher<Data[]> {
 					throw new Error(`server response error ${status}`);
 				} else {
 					const data = await res.json();
-					return getConnection(data);
+					return {
+						data: getConnection(data),
+						errors: data.errors,
+					};
 				}
 			} catch (error) {
 				if (logErrors) {
